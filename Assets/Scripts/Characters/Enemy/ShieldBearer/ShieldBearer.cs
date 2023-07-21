@@ -11,7 +11,7 @@ public class ShieldBearer : Enemy
         if (CheckPlayer(out Player player))
         {
             RotateTowardsPlayer(player.transform.position);
-            weapon.Attack(player.transform.position);
+            //weapon.Attack(player.transform.position);
         }
     }
 
@@ -21,5 +21,11 @@ public class ShieldBearer : Enemy
         Vector2 directionRotate = (playerPosition - castPosition).normalized;
         angle = Mathf.Atan2(directionRotate.y, directionRotate.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0, 0, angle - 90f), speedRotate * Time.fixedDeltaTime);
+    }
+
+    protected override void Death()
+    {
+        base.Death();
+        Destroy(gameObject);
     }
 }

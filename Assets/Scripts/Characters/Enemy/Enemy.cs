@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Enemy : Character
@@ -6,37 +7,58 @@ public class Enemy : Character
     [SerializeField] protected BotWeapon weapon;
     [SerializeField] protected float rangeDetected;
     [SerializeField] protected LayerMask playerLayer;
-
-    private bool isInitialized;
-
+    [SerializeField] protected float speedDamageBust;
+    
     protected virtual void Start()
     {
-        weapon.TakeUp(transform);
+        Activate();
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        Player player = other.GetComponentInParent<Player>();
+        if (player)
+        {
+            Vector2 directionDamageBoost = player.transform.position - transform.position;
+            player.TakeDamage(1, directionDamageBoost);
+        }
     }
 
     protected virtual bool CheckPlayer(out Player player)
     {
-        if (!isInitialized) 
+        player = null;
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, rangeDetected);
+
+        foreach (Collider2D collide in colliders)
         {
-            player = null;
+            if (collide.isTrigger)
+                continue;
+            
+            player = collide.GetComponentInParent<Player>();
+            
+            if (player)
+                break;
+        }
+
+        if (!player)
             return false;
-        }
-
-        Collider2D playerCollider = Physics2D.OverlapCircle(transform.position, rangeDetected, playerLayer);
-
-        if (playerCollider) 
-        {
-            if (playerCollider.TryGetComponent(out player))
-            {
-                Vector2 directionPlayer = player.transform.position - transform.position;
-
-                RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, directionPlayer, rangeDetected, noIgnoreLayer);
-                if (hitInfo.collider)
-                    if (((1 << hitInfo.collider.gameObject.layer) & playerLayer) != 0)
-                        return true;
-            }
-        }
         
+        Vector2 directionPlayer = player.transform.position - transform.position;
+        
+        RaycastHit2D[] hitsInfo = Physics2D.RaycastAll(transform.position, directionPlayer, rangeDetected);
+
+        foreach (RaycastHit2D hitInfo in hitsInfo)
+        {
+            if (hitInfo.collider.isTrigger) 
+                continue;
+            player = hitInfo.collider.GetComponentInParent<Player>();
+
+            if (player)
+            {
+                return true;
+            }
+            break;
+        }
         player = null;
         return false;
     }
@@ -49,6 +71,13 @@ public class Enemy : Character
         transform.rotation = Quaternion.Euler(0, 0, angle - 90f);
     }
 
-    public void Initialize() => isInitialized = true;
-    public void Deinitialize() => isInitialized = false;
+    public override void Activate()
+    {
+        weapon.InitializedWeapon();
+    }
+
+    public override void Deactivate()
+    {
+        throw new NotImplementedException();
+    }
 }

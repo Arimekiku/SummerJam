@@ -1,90 +1,110 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class Player : Character
 {
+    public bool debugMode;
+
+    [SerializeField] private float moveSpeed;
     [SerializeField] private float dashSpeed;
     [SerializeField] private float dashDuration;
     [SerializeField] private float dashCoolDown;
 
-    [SerializeField] private LayerMask weaponLayer;
+    [SerializeField] private float defaultTimeInvul;
+    
     [SerializeField] private LayerMask levelLayer;
+    
+    [SerializeField] private PlayerMeleeWeapon currentMeleeWeapon;
+    [SerializeField] private PlayerRangedWeapon currentRangedWeapon;
 
-    [SerializeField] private Weapon detectedWeapon;
-    [SerializeField] private Melee meleeWeapon;
-
-    [SerializeField] private Transform weaponContainer;
+    [SerializeField] private Transform rangedWeaponContainer;
     [SerializeField] private Transform meleeWeaponContainer;
+
+    public Transform MeleeWeaponContainer => meleeWeaponContainer;
+    public Transform RangedWeaponContainer => rangedWeaponContainer;
+    public SpriteRenderer Rend { get; private set; }
 
     [NonSerialized] public Vector2 currentCheckPointPosition;
 
+    private readonly Dictionary<Type, int> ammoStack = new Dictionary<Type, int>();
+
     private bool dashOnCoolDown;
-    public bool IsDashing { get; private set; }
-    public bool canAct;
+    private bool isDashing;
+    private bool invulnerable;
+    private bool canAct;
 
-    private Weapon currentWeapon;
     private Rigidbody2D body;
-
-    private Vector2 CursorPosition => Camera.main.ScreenToWorldPoint(Input.mousePosition);
+    private CameraObject cameraObject;
+    
+    private static Vector2 CursorPosition => Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
     private void Awake()
     {
         body = GetComponent<Rigidbody2D>();
+        Rend = GetComponentInChildren<SpriteRenderer>();
+        cameraObject = FindObjectOfType<CameraObject>();
+        
+        EnterDebug();
     }
 
     private void Update()
     {
-        if (canAct) 
+        if (!canAct) 
+            return;
+        
+        RotateTowardsMouse();
+
+        if (Input.GetKeyDown(KeyCode.LeftShift) && !dashOnCoolDown)
+            Dash();
+
+        if (Input.GetKeyDown(KeyCode.Mouse1)) 
+            if (currentMeleeWeapon)
+                currentMeleeWeapon.Attack(CursorPosition);
+
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+            if (currentRangedWeapon)
+                currentRangedWeapon.Attack(CursorPosition);
+
+        if (Input.GetKeyDown(KeyCode.Q))
         {
-            RotateTowardsMouse();
-
-            if (Input.GetKeyDown(KeyCode.LeftShift) && !dashOnCoolDown)
-                Dash();
-
-            if (Input.GetKeyDown(KeyCode.Mouse1)) 
-                meleeWeapon.Attack(CursorPosition);
-
-            if (Input.GetKeyDown(KeyCode.Mouse0))
-                if (currentWeapon)
-                    currentWeapon.Attack(CursorPosition);
-
-            if (Input.GetKeyDown(KeyCode.E))
+            if (currentRangedWeapon)
             {
-                detectedWeapon = TryWeaponDetector();
-
-                if (detectedWeapon != null)
+                if (currentRangedWeapon is not Bow)
                 {
-                    if (currentWeapon)
-                        currentWeapon.CastOut(transform.position);
-
-                    currentWeapon = detectedWeapon;
-                    currentWeapon.TakeUp(weaponContainer);
-                    detectedWeapon = null;
+                    currentRangedWeapon.ThrowWeapon(CursorPosition);
+                    currentRangedWeapon = null;
                 }
-            }   
+            }
+
+            if (currentMeleeWeapon)
+            {
+                currentMeleeWeapon.ThrowWeapon(CursorPosition);
+                currentRangedWeapon = null;
+            }
+        }
+        
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            IPickupable item = DetectPickup();
+            
+            PickUpItem(item);
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            if(currentRangedWeapon)
+                Reload(currentRangedWeapon);
         }
     }
 
     private void FixedUpdate()
     {
-        if (!IsDashing && canAct)
+        if (!isDashing && canAct)
             Move();
-    }
-
-    public void Initialize()
-    {
-        canAct = true;
-        IsDashing = dashOnCoolDown = false;
-        health = 3;
-        gameObject.SetActive(true);
-    }
-
-    public void Deinitialize()
-    {
-        canAct = false;
-        gameObject.SetActive(false);
     }
 
     private void RotateTowardsMouse()
@@ -97,7 +117,7 @@ public class Player : Character
     private void Move()
     {
         Vector2 moveVector = InputVector();
-        Vector2 newPosition = body.position + speed * Time.fixedDeltaTime * moveVector;
+        Vector2 newPosition = body.position + moveSpeed * Time.fixedDeltaTime * moveVector;
         body.MovePosition(newPosition);
     }
 
@@ -108,62 +128,59 @@ public class Player : Character
         if (directionDash == Vector2.zero) 
             return;
 
-        IsDashing = true;
+        isDashing = true;
         dashOnCoolDown = true;
         StartCoroutine(CoolDownDash());
         StartCoroutine(DashMoving(directionDash));
-    }
-
-    private IEnumerator DashMoving(Vector2 directionDash)
-    {
-        float time = dashDuration;
-        float speed = dashSpeed;
-
-        while (time > 0.1)
+        
+        IEnumerator CoolDownDash()
         {
-            Vector2 newPosition = body.position + speed * Time.fixedDeltaTime * directionDash;
-            Vector2 newDirection = Vector2.zero;
+            float time = dashCoolDown;
 
-            RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, directionDash, 0.8f, levelLayer);
-
-            if (hitInfo)
+            while (time > 0)
             {
-                if (Math.Abs(Vector2.Dot(directionDash, hitInfo.normal)) >= 0.98f)
-                    break;
-
-                newDirection = SlideCollision(directionDash, hitInfo) * (speed * time / dashDuration);
+                time -= Time.fixedDeltaTime;
+                yield return new WaitForSeconds(Time.fixedDeltaTime);
             }
 
-            if (newDirection != Vector2.zero)
-                newPosition = body.position + newDirection * Time.fixedDeltaTime;
-
-            body.MovePosition(newPosition);
-            time -= Time.fixedDeltaTime;
-
-            yield return new WaitForSeconds(Time.fixedDeltaTime);
+            dashOnCoolDown = false;
         }
-
-        IsDashing = false;
-    }
-
-    private Vector3 SlideCollision(Vector2 direction, RaycastHit2D hitInfo)
-    {
-        return Vector3.ProjectOnPlane(direction, hitInfo.normal);
-    }
-
-    private IEnumerator CoolDownDash()
-    {
-        float time = dashCoolDown;
-
-        while (time > 0)
+        
+        IEnumerator DashMoving(Vector2 dirDash)
         {
-            time -= Time.fixedDeltaTime;
-            yield return new WaitForSeconds(Time.fixedDeltaTime);
+            float time = dashDuration;
+            float speed = dashSpeed;
+            
+            while (time > 0.1)
+            {
+                Vector2 newPosition = body.position + speed * Time.fixedDeltaTime * dirDash;
+                Vector2 newDirection = Vector2.zero;
+
+                RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, dirDash, 0.8f, levelLayer);
+
+                if (hitInfo)
+                {
+                    if (Math.Abs(Vector2.Dot(dirDash, hitInfo.normal)) >= 0.98f)
+                        break;
+
+                    newDirection = SlideCollision(dirDash, hitInfo) * (speed * time / dashDuration);
+                }
+
+                if (newDirection != Vector2.zero)
+                    newPosition = body.position + newDirection * Time.fixedDeltaTime;
+
+                body.MovePosition(newPosition);
+                time -= Time.fixedDeltaTime;
+
+                yield return new WaitForSeconds(Time.fixedDeltaTime);
+            }
+
+            isDashing = false;
+            
+            Vector3 SlideCollision(Vector2 direction, RaycastHit2D hitInfo) => Vector3.ProjectOnPlane(direction, hitInfo.normal);
         }
-
-        dashOnCoolDown = false;
     }
-
+    
     private Vector2 InputVector()
     {
         Vector2 inputVector = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
@@ -174,33 +191,157 @@ public class Player : Character
         return inputVector;
     }
 
-    private Weapon TryWeaponDetector()
+    private IPickupable DetectPickup()
     {
-        RaycastHit2D[] hitsInfo = Physics2D.CircleCastAll(transform.position, 1.5f, transform.forward, 1.5f, weaponLayer);
+        Collider2D[] hitsInfo = Physics2D.OverlapCircleAll(transform.position, 1.5f);
 
         if (hitsInfo.Length == 0)
             return null;
 
-        foreach (RaycastHit2D hitInfo in hitsInfo)
+        foreach (Collider2D hitInfo in hitsInfo)
         {
-            if (hitInfo.collider.TryGetComponent(out IInteractable interactableObject))
+            if (hitInfo.TryGetComponent(out IPickupable pickup))
             {
-                interactableObject.Interact();
-                return null;
+                if (pickup.Pickupable)
+                {
+                    pickup.PickUp(this);
+                    return pickup;
+                }
             }
-
-            Weapon weapon = hitInfo.collider.GetComponentInParent<Weapon>();
-
-            if (weapon.OnTheFloor)
-                return weapon;
         }
 
         return null;
     }
 
-    public void TeleportToLastCheckPoint()
+    private void PickUpItem<T>(T item) where T : IPickupable
     {
-        transform.position = currentCheckPointPosition;
-        Camera.main.transform.position = transform.position;
+        Vector2 playerPosition = transform.position;
+        
+        switch (item)
+        {
+            case PlayerMeleeWeapon weapon:
+            {
+                if (currentMeleeWeapon)
+                    currentMeleeWeapon.CastOut(playerPosition);
+
+                currentMeleeWeapon = weapon;
+                return;
+            }
+            case PlayerRangedWeapon weapon:
+            {
+                if (currentRangedWeapon)
+                    currentRangedWeapon.CastOut(playerPosition);
+
+                currentRangedWeapon = weapon;
+                return;
+            }
+            case StackForAmmo stackForAmmo:
+            {
+                foreach (Type keyValuePair in ammoStack.Keys)
+                {
+                    if (keyValuePair == stackForAmmo.weaponType.GetType())
+                    {
+                        ammoStack[keyValuePair] += stackForAmmo.ammoInStack;
+                        return;
+                    }
+                }
+
+                ammoStack.Add(stackForAmmo.weaponType.GetType(), stackForAmmo.ammoInStack);
+                return;
+            }
+        }
+    }
+    
+    public override void TakeDamage(int damage, Vector2 damageDirection)
+    {
+        if (IgnoreDamage()) 
+            return;
+        
+        base.TakeDamage(damage, damageDirection);
+
+        if (!invulnerable)
+        {
+            StartCoroutine(TimerInvulnerable());
+            StartCoroutine(DamageBoost());
+        }
+
+        IEnumerator TimerInvulnerable()
+        {
+            float time = defaultTimeInvul + 0.1f * (damage - 1);
+
+            invulnerable = true;
+        
+            while (time > 0)
+            {
+                time -= Time.fixedDeltaTime;
+                yield return new WaitForSeconds(Time.fixedDeltaTime);
+            }
+
+            invulnerable = false;
+        }
+
+        IEnumerator DamageBoost()
+        {
+            damageDirection = damageDirection.normalized;
+            
+            float time = (defaultTimeInvul + 0.1f * (damage - 1));
+            float distance = damage;
+
+            float speed = distance / time;
+
+            isDashing = true;
+            
+            while (time > 0)
+            {
+                Vector2 newPosition = body.position +  speed * Time.fixedDeltaTime * damageDirection;
+                body.MovePosition(newPosition);
+                time -= Time.fixedDeltaTime;
+                yield return new WaitForSeconds(Time.fixedDeltaTime);
+            }
+
+            isDashing = false;
+        }
+    }
+
+    private void Reload(PlayerRangedWeapon reloadWeapon)
+    {
+        foreach (Type ammoStackKey in ammoStack.Keys)
+        {
+            if (ammoStackKey != reloadWeapon.GetType())
+                continue;
+            
+            ammoStack[ammoStackKey] -= reloadWeapon.Reload(ammoStack[ammoStackKey]);
+            return;
+        }
+    }
+    
+    public bool IgnoreDamage() => isDashing || invulnerable;
+    
+    protected override void Death()
+    {
+        Debug.Log("Death");
+    }
+
+    public override void Activate()
+    {
+        canAct = true;
+        cameraObject.FindTarget();
+    }
+
+    public override void Deactivate()
+    {
+        canAct = false;
+        cameraObject.LoseTarget();
+    }
+
+    private void EnterDebug()
+    {
+        if (debugMode)
+        {
+            Activate();
+            cameraObject.FindTarget();
+            FindObjectOfType<GameBeginner>().BeginGame();
+            transform.position = new Vector2(110, 0);
+        }
     }
 }

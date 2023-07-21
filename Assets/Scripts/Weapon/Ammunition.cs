@@ -1,71 +1,56 @@
+using System;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D))]
+
+[RequireComponent(typeof(Rigidbody2D), typeof(BoxCollider2D))]
 public abstract class Ammunition : MonoBehaviour, IDestroyed
 {
-    [SerializeField] protected int damage;
-    [SerializeField] private float speed;
-    [SerializeField] protected LayerMask destroyLayer;
-    [SerializeField] protected LayerMask damageLayer;
+	[SerializeField] private float speed = 6;
 
-    protected Rigidbody2D rb;
-    protected Vector3 flightDirection;
+	protected int damage;
 
-    protected void Start()
-    {
-        rb = GetComponent<Rigidbody2D>();
-    }
+	protected Rigidbody2D rb;
+	protected Vector2 flightDirection;
 
-    void FixedUpdate()
-    {
-        if (flightDirection != Vector3.zero)
-            Flight();
-    }
+	protected void Start()
+	{
+		rb = GetComponent<Rigidbody2D>();
+	}
 
-    protected virtual void OnCollisionEnter2D(Collision2D other)
-    {
-        if (((1 << other.gameObject.layer) & destroyLayer) != 0)
-        {
-            gameObject.SetActive(false);
-            return;
-        }
+	private void FixedUpdate()
+	{
+		if (flightDirection != Vector2.zero)
+			Flight();
+	}
+	
+	protected abstract void OnTriggerEnter2D(Collider2D other);
 
-        if (((1 << other.gameObject.layer) & damageLayer) != 0)
-        {
-            Character character = other.gameObject.GetComponentInParent<Character>();
-            character.TakeDamage(damage);
-            gameObject.SetActive(false);
-            return;
-        }
-    }
+	private void Flight()
+	{
+		Vector2 newPosition = (Vector2)transform.position + speed * Time.fixedDeltaTime * flightDirection;
+		rb.MovePosition(newPosition);
+	}
 
-    protected virtual void OnTriggerEnter2D(Collider2D other)
-    {
-        if (((1 << other.gameObject.layer) & destroyLayer) != 0)
-        {
-            gameObject.SetActive(false);
-            return;
-        }
-    }
+	public void SetDirectionAndStart(Vector2 direction, Vector2 startPosition)
+	{
+		float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
-    private void Flight()
-    {
-        Vector2 newPosition = transform.position + speed * Time.fixedDeltaTime * flightDirection;
-        rb.MovePosition(newPosition);
-    }
+		transform.SetPositionAndRotation(startPosition, Quaternion.Euler(0f, 0f, angle - 90f));
 
-    public void SetDirectionAndStart(Vector2 direction, Vector2 startPosition)
-    {
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+		flightDirection = direction.normalized;
+		gameObject.SetActive(true);
+	}
 
-        transform.SetPositionAndRotation(startPosition, Quaternion.Euler(0f, 0f, angle - 90f));
+	public void DestroyThisObject()
+	{
+		Destroy(gameObject);
+	}
 
-        flightDirection = direction.normalized;
-        gameObject.SetActive(true);
-    }
-
-    public void DestroyThisObject()
-    {
-        Destroy(gameObject);
-    }
+	public void SetDamage(int newDamage)
+	{
+		if (newDamage < 0)
+			throw new ArgumentException("Damage cannot be null");
+		
+		damage = newDamage;
+	}
 }

@@ -15,20 +15,20 @@ public class Gunner : Enemy
         countShots = numberOfShots;
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         if (CheckPlayer(out Player player))
         {
             RotateTowardsPlayer(player.transform.position);
-            if (!isDelay)
-                AttackQueue(player);
+            /*if (!isDelay)
+                AttackQueue(player);*/
         }
     }
 
     private void AttackQueue(Player player)
     {
-        if (weapon.Attack(player.transform.position))
-            countShots--;
+        /*if (weapon.Attack(player.transform.position))
+            countShots--;*/
 
         if (countShots <= 0)
         {

@@ -17,6 +17,8 @@ public class ErasableWall : MonoBehaviour, IInteractable
         col = GetComponent<Collider2D>();
     }
 
+    public InteractType Type => InteractType.Button;
+
     public void Interact()
     {
         if (!canBeErased)

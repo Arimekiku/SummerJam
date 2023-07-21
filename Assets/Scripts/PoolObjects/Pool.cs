@@ -1,17 +1,16 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 
 public class Pool<T> where T : MonoBehaviour
 {
-    public T prefab;
+    private readonly T prefab;
 
-    public Transform container;
+    private readonly Transform container;
 
-    public bool autoExpand;
+    private readonly bool autoExpand;
 
-    List<T> poolList;
+    public List<T> PoolList { get; private set; }
 
     public Pool(T prefab, Transform container, bool autoExpand)
     {
@@ -22,7 +21,7 @@ public class Pool<T> where T : MonoBehaviour
 
     public void CreatePool(int count)
     {
-        poolList = new List<T>();
+        PoolList = new List<T>();
 
         for (int i = 0; i < count; i++)
         {
@@ -32,31 +31,27 @@ public class Pool<T> where T : MonoBehaviour
 
     public void DestroyPool()
     {
-        IDestroyed destroyed;
-
-        foreach (T objectByDestroy in poolList)
+        foreach (T objectToDestroy in PoolList)
         {
-            destroyed = objectByDestroy.GetComponent<IDestroyed>();
-            if (destroyed != null)
-            {
-                destroyed.DestroyThisObject();
-            }
+            IDestroyed destroyed = objectToDestroy.GetComponent<IDestroyed>();
+            destroyed?.DestroyThisObject();
         }
-        poolList.Clear();
+        
+        PoolList.Clear();
     }
 
 
-    T CreateObject(bool setActiveByDefolt = false)
+    private T CreateObject(bool setActiveByDefault = false)
     {
-        var newObject = Object.Instantiate(prefab, container);
-        newObject.gameObject.SetActive(setActiveByDefolt);
-        this.poolList.Add(newObject);
+        T newObject = Object.Instantiate(prefab, container);
+        newObject.gameObject.SetActive(setActiveByDefault);
+        PoolList.Add(newObject);
         return newObject;
     }
 
     public bool GetFreeElement(out T freeObjectInPool)
     {
-        foreach (var objectInPool in poolList)
+        foreach (T objectInPool in PoolList)
         {
             if (!objectInPool.gameObject.activeInHierarchy)
             {
@@ -66,13 +61,13 @@ public class Pool<T> where T : MonoBehaviour
             }
         }
 
-        AutoExpand(out var createdObject);
+        AutoExpand(out T createdObject);
 
         freeObjectInPool = createdObject;
         return false;
     }
 
-    void AutoExpand(out T createdObject)
+    private void AutoExpand(out T createdObject)
     {
         if (autoExpand)
         {
@@ -85,10 +80,11 @@ public class Pool<T> where T : MonoBehaviour
         throw new System.Exception($"The pool ran out of objects with the type {typeof(T)}");
     }
 
-    public T GetElemToIndex(int index)
+    public T GetElementIndex(int index)
     {
-        if (index < 0 || index > poolList.Count - 1)
+        if (index < 0 || index > PoolList.Count - 1)
             throw new System.Exception("Out of range");
-        return poolList[index];
+        
+        return PoolList[index];
     }
 }

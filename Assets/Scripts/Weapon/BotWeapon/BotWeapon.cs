@@ -1,22 +1,6 @@
-using UnityEngine;
-
-public class BotWeapon : RangedWeapon
+public abstract class BotWeapon : Weapon
 {
-    public override void TakeUp(Transform weaponContainer)
-    {
-        poolAmmo = new Pool<Ammunition>(ammunitionPrefab, ammoContainer, true);
-        poolAmmo.CreatePool(5);
-        OnTheFloor = false;
-    }
+	public abstract void InitializedWeapon();
 
-    public override void CastOut(Vector2 PlayerPosition)
-    {
-        poolAmmo.DestroyPool();
-        Destroy(gameObject);
-    }
-
-    protected override void UpdateUI()
-    {
-        throw new System.NotImplementedException();
-    }
+	public abstract void DestroyWeapon();
 }
