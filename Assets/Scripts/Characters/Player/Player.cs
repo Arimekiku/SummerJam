@@ -1,8 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Cinemachine;
+using DG.Tweening;
 using UnityEngine;
-
+using UnityEngine.UI;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class Player : Character
@@ -13,6 +16,7 @@ public class Player : Character
     [SerializeField] private float dashSpeed;
     [SerializeField] private float dashDuration;
     [SerializeField] private float dashCoolDown;
+    [SerializeField] private int maxHealth;
 
     [SerializeField] private float defaultTimeInvul;
     
@@ -24,6 +28,10 @@ public class Player : Character
     [SerializeField] private Transform rangedWeaponContainer;
     [SerializeField] private Transform meleeWeaponContainer;
 
+    [SerializeField] private Image loader;
+    [SerializeField] private List<Image> healthContainers;
+    [SerializeField] private CinemachineVirtualCamera cameraToEnable;
+
     public Transform MeleeWeaponContainer => meleeWeaponContainer;
     public Transform RangedWeaponContainer => rangedWeaponContainer;
     public SpriteRenderer Rend { get; private set; }
@@ -33,9 +41,10 @@ public class Player : Character
     private readonly Dictionary<Type, int> ammoStack = new Dictionary<Type, int>();
 
     private bool dashOnCoolDown;
-    private bool isDashing;
+    public bool IsDashing { get; private set; }
     private bool invulnerable;
     private bool canAct;
+    private bool canDash;
 
     private Rigidbody2D body;
     private CameraObject cameraObject;
@@ -47,6 +56,8 @@ public class Player : Character
         body = GetComponent<Rigidbody2D>();
         Rend = GetComponentInChildren<SpriteRenderer>();
         cameraObject = FindObjectOfType<CameraObject>();
+
+        currentHealth = maxHealth;
         
         EnterDebug();
     }
@@ -103,7 +114,7 @@ public class Player : Character
 
     private void FixedUpdate()
     {
-        if (!isDashing && canAct)
+        if (!IsDashing && canAct)
             Move();
     }
 
@@ -123,12 +134,15 @@ public class Player : Character
 
     private void Dash()
     {
+        if (!canDash)
+            return;
+        
         Vector2 directionDash = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
 
         if (directionDash == Vector2.zero) 
             return;
 
-        isDashing = true;
+        IsDashing = true;
         dashOnCoolDown = true;
         StartCoroutine(CoolDownDash());
         StartCoroutine(DashMoving(directionDash));
@@ -175,7 +189,7 @@ public class Player : Character
                 yield return new WaitForSeconds(Time.fixedDeltaTime);
             }
 
-            isDashing = false;
+            IsDashing = false;
             
             Vector3 SlideCollision(Vector2 direction, RaycastHit2D hitInfo) => Vector3.ProjectOnPlane(direction, hitInfo.normal);
         }
@@ -208,6 +222,12 @@ public class Player : Character
                     return pickup;
                 }
             }
+
+            if (hitInfo.TryGetComponent(out IInteractable interactable))
+            {
+                interactable.Interact();
+                return null;
+            }
         }
 
         return null;
@@ -235,20 +255,6 @@ public class Player : Character
                 currentRangedWeapon = weapon;
                 return;
             }
-            case StackForAmmo stackForAmmo:
-            {
-                foreach (Type keyValuePair in ammoStack.Keys)
-                {
-                    if (keyValuePair == stackForAmmo.weaponType.GetType())
-                    {
-                        ammoStack[keyValuePair] += stackForAmmo.ammoInStack;
-                        return;
-                    }
-                }
-
-                ammoStack.Add(stackForAmmo.weaponType.GetType(), stackForAmmo.ammoInStack);
-                return;
-            }
         }
     }
     
@@ -258,7 +264,13 @@ public class Player : Character
             return;
         
         base.TakeDamage(damage, damageDirection);
-
+        
+        for (int i = 0; i < damage; i++) 
+        {
+            Image lastContainer = healthContainers.Last(h => h.enabled);
+            lastContainer.enabled = false;
+        }
+        
         if (!invulnerable)
         {
             StartCoroutine(TimerInvulnerable());
@@ -289,7 +301,7 @@ public class Player : Character
 
             float speed = distance / time;
 
-            isDashing = true;
+            IsDashing = true;
             
             while (time > 0)
             {
@@ -299,7 +311,7 @@ public class Player : Character
                 yield return new WaitForSeconds(Time.fixedDeltaTime);
             }
 
-            isDashing = false;
+            IsDashing = false;
         }
     }
 
@@ -315,15 +327,41 @@ public class Player : Character
         }
     }
     
-    public bool IgnoreDamage() => isDashing || invulnerable;
+    public bool IgnoreDamage() => IsDashing || invulnerable;
     
     protected override void Death()
     {
-        Debug.Log("Death");
+        base.Death();
+        cameraToEnable.enabled = true;
+        TeleportToLastCheckPoint();
+        RestoreHealth(maxHealth);
+    }
+
+    public void TeleportToLastCheckPoint()
+    {
+        Deactivate();
+
+        loader.rectTransform.DOScale(new Vector3(1, 1, 1), 1f).OnComplete(() =>
+        {
+            Activate();
+            transform.position = currentCheckPointPosition;
+            loader.rectTransform.DOScale(new Vector3(0, 0, 0), 1f);
+        });
     }
 
     public override void Activate()
     {
+        int i = 0;
+        
+        foreach (Image healthContainer in healthContainers)
+        {
+            if (healthContainer.enabled == false)
+                healthContainer.enabled = true;
+
+            if (++i == currentHealth)
+                break;
+        }
+
         canAct = true;
         cameraObject.FindTarget();
     }
@@ -332,6 +370,54 @@ public class Player : Character
     {
         canAct = false;
         cameraObject.LoseTarget();
+    }
+
+    public void NewCheckPoint(Transform newPoint)
+    {
+        currentCheckPointPosition = newPoint.position;
+    }
+
+    public void RestoreHealth(int amount)
+    {
+        currentHealth = Mathf.Min(currentHealth + amount, maxHealth);
+        
+        for (int i = 0; i < amount; i++)
+        {
+            Image firstContainer = healthContainers.First(h => h.enabled == false);
+            firstContainer.enabled = true;
+        }
+    }
+
+    public void RestoreAmmo(int amount, PlayerWeapon ammoType)
+    {
+        foreach (Type keyValuePair in ammoStack.Keys)
+        {
+            if (keyValuePair == ammoType.GetType())
+            {
+                ammoStack[keyValuePair] += amount;
+                return;
+            }
+        }
+
+        ammoStack.Add(ammoType.GetType(), amount);
+    }
+
+    public void AllowDash()
+    {
+        canDash = true;
+    }
+
+    public void IncreaseMaxHp(int amount)
+    {
+        maxHealth += amount;
+
+        for (int i = 0; i < amount; i++)
+        {
+            Image firstContainer = healthContainers.First(h => h.gameObject.activeSelf == false);
+            firstContainer.gameObject.SetActive(true);
+        }
+        
+        RestoreHealth(amount);
     }
 
     private void EnterDebug()

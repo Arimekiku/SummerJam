@@ -1,16 +1,18 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
-    //Enemy Spawner Script
+    [SerializeField] private List<Enemy> enemies;
 
     private void Start()
     {
         SpawnEnemy();
     }
 
-    private void SpawnEnemy()
+    public void SpawnEnemy()
     {
-        Debug.Log("Enemy spawned from: " + name);
+        int rand = Random.Range(0, enemies.Count);
+        Instantiate(enemies[rand], transform);
     }
 }

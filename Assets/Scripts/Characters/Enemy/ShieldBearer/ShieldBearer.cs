@@ -10,8 +10,9 @@ public class ShieldBearer : Enemy
     {
         if (CheckPlayer(out Player player))
         {
-            RotateTowardsPlayer(player.transform.position);
-            //weapon.Attack(player.transform.position);
+            Vector2 playerPosition = player.transform.position;
+            RotateTowardsPlayer(playerPosition);
+            weapon.Attack(transform.up);
         }
     }
 
@@ -26,6 +27,6 @@ public class ShieldBearer : Enemy
     protected override void Death()
     {
         base.Death();
-        Destroy(gameObject);
+        Deactivate();
     }
 }

@@ -1,12 +1,9 @@
-using System;
 using UnityEngine;
 
 public class Enemy : Character
 {
-    [SerializeField] protected LayerMask noIgnoreLayer;
     [SerializeField] protected BotWeapon weapon;
     [SerializeField] protected float rangeDetected;
-    [SerializeField] protected LayerMask playerLayer;
     [SerializeField] protected float speedDamageBust;
     
     protected virtual void Start()
@@ -16,8 +13,7 @@ public class Enemy : Character
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Player player = other.GetComponentInParent<Player>();
-        if (player)
+        if (other.TryGetComponent(out Player player))
         {
             Vector2 directionDamageBoost = player.transform.position - transform.position;
             player.TakeDamage(1, directionDamageBoost);
@@ -27,6 +23,7 @@ public class Enemy : Character
     protected virtual bool CheckPlayer(out Player player)
     {
         player = null;
+        
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, rangeDetected);
 
         foreach (Collider2D collide in colliders)
@@ -34,9 +31,7 @@ public class Enemy : Character
             if (collide.isTrigger)
                 continue;
             
-            player = collide.GetComponentInParent<Player>();
-            
-            if (player)
+            if (collide.TryGetComponent(out player))
                 break;
         }
 
@@ -51,14 +46,11 @@ public class Enemy : Character
         {
             if (hitInfo.collider.isTrigger) 
                 continue;
-            player = hitInfo.collider.GetComponentInParent<Player>();
 
-            if (player)
-            {
+            if (hitInfo.collider.TryGetComponent(out player))
                 return true;
-            }
-            break;
         }
+        
         player = null;
         return false;
     }
@@ -73,11 +65,12 @@ public class Enemy : Character
 
     public override void Activate()
     {
-        weapon.InitializedWeapon();
+        if (weapon)
+            weapon.InitializedWeapon();
     }
 
     public override void Deactivate()
     {
-        throw new NotImplementedException();
+        Destroy(gameObject);
     }
 }

@@ -3,14 +3,16 @@ using UnityEngine;
 
 public abstract class Character : MonoBehaviour
 {
-    [SerializeField] protected int health;
+    [SerializeField] protected int currentHealth;
     
     public event Action OnDeathEvent;
+    public int Health => currentHealth;
 
     public virtual void TakeDamage(int damage, Vector2 damageDirection)
     {
-        health -= damage;
-        if (health <= 0)
+        currentHealth -= damage;
+        
+        if (currentHealth <= 0)
             Death();
     }
     

@@ -100,7 +100,7 @@ BoxCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 2048
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -163,7 +163,7 @@ Transform:
   - {fileID: 8431211367505390704}
   - {fileID: 7596228854816560801}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &-3045264560444218481
 MonoBehaviour:
@@ -179,7 +179,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   firstPoint: {fileID: 8431211367505390704}
   secondPoint: {fileID: 7596228854816560801}
-  arrowPrefab: {fileID: 4687868528885955999, guid: f59e330ea941bb440af17a6486a302c0, type: 3}
+  arrowPrefab: {fileID: 1090462973757473359, guid: aa27d14e44edad74a86e387b6dd69583, type: 3}
 --- !u!1 &3764988749349872427
 GameObject:
   m_ObjectHideFlags: 0
@@ -204,7 +204,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3764988749349872427}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.172, y: -0.1, z: 0}
+  m_LocalPosition: {x: -0.172, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -235,7 +235,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6530102992294955515}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.12, y: -0.1, z: 0}
+  m_LocalPosition: {x: 0.12, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

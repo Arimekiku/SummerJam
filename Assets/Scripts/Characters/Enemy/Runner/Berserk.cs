@@ -1,17 +1,18 @@
-using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class Berserk : Enemy
 {
     [SerializeField] private float moveSpeed;
-    [SerializeField] private float timeToPreparation;
+    [SerializeField] private float timeToPreparationJump;
+    [SerializeField] private float timeToPreparationThrow;
     [SerializeField] private float jumpCoolDownTime;
-
-    public event Action<bool> OnJumpEvent;
+    [SerializeField] private float throwCoolDownTime;
+    [SerializeField] private List<BerserkAxe> axes = new List<BerserkAxe>();
 
     private Rigidbody2D rb;
     private bool isReady = true;
@@ -19,6 +20,9 @@ public class Berserk : Enemy
 
     protected override void Start()
     {
+        foreach (BerserkAxe berserkAxe in axes)
+            berserkAxe.InitializedWeapon();
+
         rb = GetComponent<Rigidbody2D>();
     }
 
@@ -36,47 +40,84 @@ public class Berserk : Enemy
 
     private IEnumerator PreparationForAttack(Player player)
     {
+        Vector2 finishPosition = player.transform.position;
+        int randValue = Random.Range(0, 100);
         isReady = false;
-        float time = timeToPreparation;
-
-        while (time > 0)
+        
+        if (randValue < 70)
         {
-            RotateTowardsPlayer(player.transform.position);
-            time -= Time.fixedDeltaTime;
-            yield return new WaitForSeconds(Time.fixedDeltaTime);
+
+            yield return StartCoroutine(Preparation(timeToPreparationJump));
+            StartCoroutine(Jump(finishPosition));
+        }
+        else
+        {
+            yield return StartCoroutine(Preparation(timeToPreparationThrow));
+            StartCoroutine(ThrowAxe(finishPosition));
         }
 
-        Vector2 finishPosition = player.transform.position;
-        StartCoroutine(Jump(finishPosition));
+        IEnumerator Preparation(float prepTime)
+        {
+            float time = prepTime;
+
+            while (time > 0)
+            {
+                time -= Time.fixedDeltaTime;
+                yield return new WaitForSeconds(Time.fixedDeltaTime);
+            }
+            
+            finishPosition = player.transform.position;
+        }
     }
 
     private IEnumerator Jump(Vector2 finishPosition)
     {
         onTheJump = true;
-        OnJumpEvent?.Invoke(true);
 
-        Vector2 directionJump = (finishPosition - rb.position).normalized;
+        Vector2 directionJump = finishPosition - rb.position;
 
         float distance = Vector2.Distance(finishPosition, transform.position);
+        float time = distance / moveSpeed;
 
-        while (distance > 1f)
+        directionJump = directionJump.normalized;
+
+        foreach (BerserkAxe berserkAxe in axes)
+            berserkAxe.RotateAttack(time);
+
+        while (time > 0)
         {
             Vector2 newPosition = rb.position + moveSpeed * Time.fixedDeltaTime * directionJump;
             rb.MovePosition(newPosition);
 
-            distance = Vector2.Distance(finishPosition, transform.position);
-
+            time -= Time.fixedDeltaTime;
             yield return new WaitForSeconds(Time.fixedDeltaTime);
         }
 
         onTheJump = false;
-        OnJumpEvent?.Invoke(false);
-        StartCoroutine(CoolDownJump());
+        StartCoroutine(CoolDownAttack(jumpCoolDownTime));
     }
 
-    private IEnumerator CoolDownJump()
+    private IEnumerator ThrowAxe(Vector2 targetPosition)
     {
-        float time = jumpCoolDownTime;
+        float time = 0;
+        foreach (BerserkAxe berserkAxe in axes)
+        {
+            berserkAxe.Attack(targetPosition);
+            time = (targetPosition - (Vector2)transform.position).magnitude / berserkAxe.SpeedFlying * 2f;
+        }
+
+        while (time > 0)
+        {
+            time -= Time.fixedDeltaTime;
+            yield return new WaitForSeconds(Time.fixedDeltaTime);
+        }
+
+        StartCoroutine(CoolDownAttack(throwCoolDownTime));
+    }
+    
+    private IEnumerator CoolDownAttack(float timeCoolDown)
+    {
+        float time = timeCoolDown;
 
         while (time > 0)
         {
@@ -91,5 +132,11 @@ public class Berserk : Enemy
     {
         base.TakeDamage(damage, damageDirection);
         
+    }
+
+    protected override void Death()
+    {
+        base.Death();
+        Destroy(gameObject);
     }
 }

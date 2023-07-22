@@ -3,14 +3,12 @@ using UnityEngine;
 
 public class Arrow : Ammunition
 {
-    private bool isStuck = false;
+    private bool isStuck;
 
     public event Action LiftOnTheFloorEvent;
-    
 
     protected override void OnTriggerEnter2D(Collider2D other)
     {
-
         if (!other.isTrigger)
         {
             Player player = other.GetComponentInParent<Player>();
@@ -34,7 +32,7 @@ public class Arrow : Ammunition
         {
             enemy.OnDeathEvent += DropTheFloor;
             transform.SetParent(enemy.transform, true);
-            enemy.TakeDamage(damage, flightDirection);
+            enemy.TakeDamage(damage, FlightDirection);
             Stuck();
             return;
         }
@@ -51,7 +49,7 @@ public class Arrow : Ammunition
         void Stuck()
         {
             rb.bodyType = RigidbodyType2D.Static;
-            flightDirection = Vector3.zero;
+            FlightDirection = Vector3.zero;
             isStuck = true;
         }
     }

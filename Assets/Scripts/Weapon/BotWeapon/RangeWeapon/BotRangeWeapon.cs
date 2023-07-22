@@ -10,6 +10,7 @@ public abstract class BotRangeWeapon : BotWeapon
     [SerializeField] protected int maxNumberOfAmmo;
 
     protected int currentAmmo;
+
     protected bool onReload;
     
     protected Vector2 FirePointPosition => firePoint.position;
@@ -24,6 +25,8 @@ public abstract class BotRangeWeapon : BotWeapon
         {
              bullet.SetDamage(damage);
         }
+
+        currentAmmo = maxNumberOfAmmo;
     }
 
     public override void DestroyWeapon()
@@ -31,11 +34,11 @@ public abstract class BotRangeWeapon : BotWeapon
         poolObject.DestroyPool();
     }
 
-    protected void Reload()
+    protected virtual void Reload()
     {
-        StartCoroutine(ReloadTimer());
+        StartCoroutine(DelayBeforeReloading());
         
-        IEnumerator ReloadTimer()
+        IEnumerator DelayBeforeReloading()
         {
             onReload = true;
             

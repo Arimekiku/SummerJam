@@ -6,11 +6,11 @@ using UnityEngine;
 public abstract class Ammunition : MonoBehaviour, IDestroyed
 {
 	[SerializeField] private float speed = 6;
-
+	
 	protected int damage;
 
 	protected Rigidbody2D rb;
-	protected Vector2 flightDirection;
+	public Vector2 FlightDirection { get; protected set; }
 
 	protected void Start()
 	{
@@ -19,7 +19,7 @@ public abstract class Ammunition : MonoBehaviour, IDestroyed
 
 	private void FixedUpdate()
 	{
-		if (flightDirection != Vector2.zero)
+		if (FlightDirection != Vector2.zero)
 			Flight();
 	}
 	
@@ -27,7 +27,7 @@ public abstract class Ammunition : MonoBehaviour, IDestroyed
 
 	private void Flight()
 	{
-		Vector2 newPosition = (Vector2)transform.position + speed * Time.fixedDeltaTime * flightDirection;
+		Vector2 newPosition = (Vector2)transform.position + speed * Time.fixedDeltaTime * FlightDirection;
 		rb.MovePosition(newPosition);
 	}
 
@@ -37,7 +37,7 @@ public abstract class Ammunition : MonoBehaviour, IDestroyed
 
 		transform.SetPositionAndRotation(startPosition, Quaternion.Euler(0f, 0f, angle - 90f));
 
-		flightDirection = direction.normalized;
+		FlightDirection = direction.normalized;
 		gameObject.SetActive(true);
 	}
 

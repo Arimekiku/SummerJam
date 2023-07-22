@@ -4,6 +4,9 @@ using Random = UnityEngine.Random;
 public class DestroyableEnvironment : MonoBehaviour, IInteractable, IDestroyed
 {
     [SerializeField] private Sprite[] possibleSprites;
+    [SerializeField] private Sprite[] paintedSprites;
+    [SerializeField] private Sprite paintedParent;
+    [SerializeField] private GameObject[] lootItems;
     [SerializeField] private DestroyablePiece destroyablePrefab;
     [SerializeField] private ParticleSystem particles;
     
@@ -11,6 +14,18 @@ public class DestroyableEnvironment : MonoBehaviour, IInteractable, IDestroyed
 
     private int maxPieces = 5;
     private int minPieces = 2;
+    private bool isLootable;
+
+    private void Awake()
+    {
+        int rand = Random.Range(0, 101);
+
+        if (rand < 20)
+            isLootable = true;
+
+        if (isLootable)
+            GetComponent<SpriteRenderer>().sprite = paintedParent;
+    }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -36,8 +51,23 @@ public class DestroyableEnvironment : MonoBehaviour, IInteractable, IDestroyed
             pieceToSpawn.transform.position = (Vector2)transform.position + offset;
             pieceToSpawn.transform.rotation = Quaternion.Euler(0, 0, Random.Range(0, 360f));
 
-            Sprite randomSprite = possibleSprites[Random.Range(0, possibleSprites.Length)];
+            Sprite randomSprite;
+
+            if (!isLootable)
+                randomSprite = possibleSprites[Random.Range(0, possibleSprites.Length)];
+            else
+                randomSprite = paintedSprites[Random.Range(0, paintedSprites.Length)];
+            
             pieceToSpawn.ApplySprite(randomSprite);
+        }
+
+        if (isLootable)
+        {
+            int rand = Random.Range(0, lootItems.Length);
+            GameObject lootToSpawn = Instantiate(lootItems[rand], transform.parent);
+            Vector2 offset = new Vector2(Random.Range(-0.4f, 0.4f), Random.Range(-0.4f, 0.4f));
+            lootToSpawn.transform.position = (Vector2)transform.position + offset;
+            lootToSpawn.transform.rotation = Quaternion.Euler(0, 0, Random.Range(0, 360f));
         }
         
         Destroy(gameObject);

@@ -18,6 +18,7 @@ public class PlayerBullet : Ammunition
 		if (character is Enemy)
 		{
 			gameObject.SetActive(false);
+			character.TakeDamage(damage, FlightDirection);
 		}
 	}
 }

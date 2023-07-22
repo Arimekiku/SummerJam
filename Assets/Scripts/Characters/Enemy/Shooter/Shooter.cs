@@ -35,13 +35,11 @@ public class Shooter : Enemy
             }
         }
     }
-
-    
     
     protected override void Death()
     {
         base.Death();
         weapon.DestroyWeapon();
-        Destroy(gameObject);
+        Deactivate();
     }
 }

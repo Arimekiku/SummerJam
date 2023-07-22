@@ -9,7 +9,7 @@ public class Pool<T> where T : MonoBehaviour
     private readonly Transform container;
 
     private readonly bool autoExpand;
-
+    
     public List<T> PoolList { get; private set; }
 
     public Pool(T prefab, Transform container, bool autoExpand)
