@@ -30,7 +30,7 @@ public class Arrow : Ammunition
         Enemy enemy = other.GetComponentInParent<Enemy>();
         if (enemy)
         {
-            enemy.OnDeathEvent += DropTheFloor;
+            enemy.OnDeath += DropTheFloor;
             transform.SetParent(enemy.transform, true);
             enemy.TakeDamage(damage, FlightDirection);
             Stuck();
@@ -40,7 +40,7 @@ public class Arrow : Ammunition
         BotShield botShield = other.GetComponentInParent<BotShield>();
         if (botShield)
         {
-            botShield.GetComponentInParent<Enemy>().OnDeathEvent += DropTheFloor;
+            botShield.GetComponentInParent<Enemy>().OnDeath += DropTheFloor;
             transform.SetParent(botShield.transform, true);
             Stuck();
             return;

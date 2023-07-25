@@ -204,3 +204,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 6
+  impactSounds:
+  - {fileID: 8300000, guid: 7d3896c52e2dbdf4da9488e7c5fc3649, type: 3}
+  - {fileID: 8300000, guid: 59a94597870bfe844a62cdb33c5d17ed, type: 3}
+  - {fileID: 8300000, guid: 32d61c39c5c05db4290116df0e4ecd85, type: 3}

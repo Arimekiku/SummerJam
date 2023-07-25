@@ -7,6 +7,7 @@ public abstract class PlayerWeapon : Weapon, IPickupable
     [SerializeField] private Sprite paintedSprite;
     [SerializeField] private float speedThrow;
     [SerializeField] private float speedThrowRotation;
+    [SerializeField] private AudioClip throwClip;
 
     private bool throwWeapon;
 
@@ -87,6 +88,7 @@ public abstract class PlayerWeapon : Weapon, IPickupable
         rb.gravityScale = 0;
 
         StartCoroutine(ThrowWeaponRoutine());
+        AudioHandler.PlaySound(throwClip);
         
         IEnumerator ThrowWeaponRoutine()
         {

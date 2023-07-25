@@ -4,6 +4,7 @@ using UnityEngine.VFX;
 public class Goblet : MonoBehaviour, IInteractable
 {
     [SerializeField] private VisualEffect playEffect;
+    [SerializeField] private ChoiceHandler choiceHandler;
     
     public InteractType Type { get; } = InteractType.Button;
 
@@ -17,9 +18,18 @@ public class Goblet : MonoBehaviour, IInteractable
     
     public void Interact()
     {
+        choiceHandler.SetMainText("Would you like to try your luck again?");
+        choiceHandler.SetLeftButtonText("Yes");
+        choiceHandler.AddActionToLeftButton(StartArena);
+
+        choiceHandler.SetRightButtonText("No");
+        choiceHandler.Appear();
+    }
+
+    private void StartArena()
+    {
         arenaScript.SetupArena();
         arenaScript.SpawnNextWave();
-        arenaScript.Door.Close();
 
         Instantiate(playEffect, transform.parent);
         GetComponent<Collider2D>().enabled = false;

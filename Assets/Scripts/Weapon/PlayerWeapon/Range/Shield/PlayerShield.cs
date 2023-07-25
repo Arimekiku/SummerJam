@@ -24,7 +24,8 @@ public class PlayerShield : PlayerRangedWeapon
 			Vector2 offsetStartPosition = new Vector2(AttackPointPosition.x + right.x * 0.2f * (1 - i), AttackPointPosition.y);
 			ammunition.SetDirectionAndStart(directionVector, offsetStartPosition);
 		}
-		
+		AudioHandler.PlaySound(releaseSound);
+
 		StartCoroutine(ReloadTimer());
 	}
 

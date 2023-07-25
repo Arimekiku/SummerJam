@@ -17,6 +17,12 @@ public class BotBullet : Ammunition
             }
             
             gameObject.SetActive(false);
+            
+            if (other.TryGetComponent(out DestroyablePiece _))
+                return;
+            
+            if (!player)
+                AudioHandler.PlaySound(impactSounds);
         }
     }
     

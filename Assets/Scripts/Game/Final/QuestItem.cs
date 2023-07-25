@@ -4,19 +4,36 @@ public class QuestItem : MonoBehaviour, IInteractable, IDestroyed
 {
     [SerializeField] private Stand standToOccupy;
     [SerializeField] private Dialogue questDialogue;
-    
-    public InteractType Type { get; } = InteractType.Button;
+    [SerializeField] private ChoiceHandler choiceHandler;
+    [SerializeField] private Sprite paintedSprite;
+    [SerializeField] private Sprite erasedSprite;
 
-    private SpriteRenderer rend;
+    public InteractType Type { get; } = InteractType.Button;
 
     private void Awake()
     {
-        rend = GetComponent<SpriteRenderer>();
+        choiceHandler = FindObjectOfType<ChoiceHandler>();
     }
 
     public void Interact()
     {
-        standToOccupy.Occupy(rend.sprite);
+        choiceHandler.SetMainText("Time to decide fate of this world.");
+        choiceHandler.SetLeftButtonText("Paint");
+        choiceHandler.AddActionToLeftButton(() =>
+        {
+            standToOccupy.SetPositiveValue();
+            standToOccupy.Occupy(paintedSprite);
+            DestroyThisObject();
+        });
+        
+        choiceHandler.SetRightButtonText("Erase");
+        choiceHandler.AddActionToRightButton(() =>
+        {
+            standToOccupy.SetNegativeValue();
+            standToOccupy.Occupy(erasedSprite);
+            DestroyThisObject();
+        });
+
         questDialogue.Interact();
     }
 

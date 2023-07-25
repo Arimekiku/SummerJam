@@ -6,6 +6,7 @@ public class ArrowTrap : MonoBehaviour
     [SerializeField] private Transform firstPoint;
     [SerializeField] private Transform secondPoint;
     [Space, SerializeField] private Ammunition arrowPrefab;
+    [SerializeField] private AudioClip releaseClip;
 
     private Transform currentPoint;
 
@@ -38,6 +39,7 @@ public class ArrowTrap : MonoBehaviour
 
             Ammunition currentArrow = Instantiate(arrowPrefab, transform);
             currentArrow.SetDirectionAndStart(transform.up, currentPoint.position);
+            AudioHandler.PlaySound(releaseClip);
             Attack();
         }
     }

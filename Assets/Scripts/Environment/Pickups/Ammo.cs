@@ -4,7 +4,7 @@ public class Ammo : MonoBehaviour
 {
     [SerializeField] private PlayerWeapon refillType;
     
-    private const int CountAmmo = 5;
+    private const int CountAmmo = 12;
 
     private void OnTriggerEnter2D(Collider2D other)
     {

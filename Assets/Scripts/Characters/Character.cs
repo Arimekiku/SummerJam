@@ -5,7 +5,10 @@ public abstract class Character : MonoBehaviour
 {
     [SerializeField] protected int currentHealth;
     
-    public event Action OnDeathEvent;
+    public event Action OnDeath;
+    public event Action OnActivate;
+    public event Action OnDeactivate;
+    
     public int Health => currentHealth;
 
     public virtual void TakeDamage(int damage, Vector2 damageDirection)
@@ -18,9 +21,16 @@ public abstract class Character : MonoBehaviour
     
     protected virtual void Death()
     {
-        OnDeathEvent?.Invoke();
+        OnDeath?.Invoke();
     }
 
-    public abstract void Activate();
-    public abstract void Deactivate();
+    public virtual void Activate()
+    {
+        OnActivate?.Invoke();
+    }
+
+    public virtual void Deactivate()
+    {
+        OnDeactivate?.Invoke();
+    }
 }

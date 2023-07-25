@@ -13,6 +13,11 @@ public class PlayerBullet : Ammunition
 				return;
 			
 			gameObject.SetActive(false);
+			
+			if (other.TryGetComponent(out DestroyablePiece _))
+				return;
+			
+			AudioHandler.PlaySound(impactSounds);
 		}
 		
 		if (character is Enemy)

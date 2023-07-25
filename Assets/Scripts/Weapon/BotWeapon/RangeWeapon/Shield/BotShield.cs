@@ -49,6 +49,7 @@ public class BotShield : BotRangeWeapon
             CreateBullet(limit - i);
             CreateBullet(i - limit);
         }
+        AudioHandler.PlaySound(releaseSound);
 
         void CreateBullet(int i)
         {

@@ -16,5 +16,6 @@ public class BotPistol : BotRangeWeapon
 		poolObject.GetFreeElement(out BotBullet botBullet);
 		Vector2 directionVector = (targetPointPosition - (Vector2)FirePointPosition).normalized;
 		botBullet.SetDirectionAndStart(directionVector, FirePointPosition);
+		AudioHandler.PlaySound(releaseSound);
 	}
 }

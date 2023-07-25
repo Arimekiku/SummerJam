@@ -3,7 +3,7 @@ using UnityEngine;
 
 
 [RequireComponent(typeof(BoxCollider2D))]
-public partial class BerserkAxe : BotWeapon
+public class BerserkAxe : BotWeapon
 {
     [SerializeField] private float speedRotate;
     [SerializeField] private float speedThrowRotation;
@@ -11,6 +11,9 @@ public partial class BerserkAxe : BotWeapon
     [SerializeField] private float rotateRadius;
     [SerializeField] private int indexAxe;
     [SerializeField, Range(0f, 1f)] private float coef;
+    [SerializeField] private AudioClip throwClip;
+    [SerializeField] private AudioClip rotateClip;
+    
     private const int TotalCount = 2;
     public float SpeedFlying => speedFlying;
 
@@ -56,6 +59,7 @@ public partial class BerserkAxe : BotWeapon
     {
         SetAttackPosition();
         StartCoroutine(AttackCoroutine());
+        AudioHandler.PlaySound(rotateClip);
         onAttack = true;
         
         IEnumerator AttackCoroutine()
@@ -102,6 +106,7 @@ public partial class BerserkAxe : BotWeapon
                 perpendicularVector = new Vector2(directionVector.y, -directionVector.x);
             
             float timer = 0;
+            AudioHandler.PlaySound(throwClip);
             
             while (timer < time)
             {

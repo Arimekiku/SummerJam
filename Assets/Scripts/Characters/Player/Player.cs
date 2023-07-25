@@ -3,63 +3,65 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Cinemachine;
-using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class Player : Character
 {
-    public bool debugMode;
-
-    [SerializeField] private float moveSpeed;
-    [SerializeField] private float dashSpeed;
-    [SerializeField] private float dashDuration;
-    [SerializeField] private float dashCoolDown;
-    [SerializeField] private int maxHealth;
-
-    [SerializeField] private float defaultTimeInvul;
-    
     [SerializeField] private LayerMask levelLayer;
-    
-    [SerializeField] private PlayerMeleeWeapon currentMeleeWeapon;
-    [SerializeField] private PlayerRangedWeapon currentRangedWeapon;
 
     [SerializeField] private Transform rangedWeaponContainer;
     [SerializeField] private Transform meleeWeaponContainer;
 
-    [SerializeField] private Image loader;
     [SerializeField] private List<Image> healthContainers;
-    [SerializeField] private CinemachineVirtualCamera cameraToEnable;
+    [SerializeField] private Transform ammoContainer;
+    [SerializeField] private Transform pocketAmmoContainer;
+    [SerializeField] private Image weaponImage;
 
+    [NonSerialized] public Vector2 currentCheckPointPosition;
+    
+    public event Action OnWeaponPickup;
+    public event Action OnReloadRequired;
+    
     public Transform MeleeWeaponContainer => meleeWeaponContainer;
     public Transform RangedWeaponContainer => rangedWeaponContainer;
     public SpriteRenderer Rend { get; private set; }
 
-    [NonSerialized] public Vector2 currentCheckPointPosition;
+    private PlayerMeleeWeapon currentMeleeWeapon;
+    private PlayerRangedWeapon currentRangedWeapon;
 
     private readonly Dictionary<Type, int> ammoStack = new Dictionary<Type, int>();
+    private List<Image> pocketAmmoSprites = new List<Image>();
+    private CinemachineImpulseSource shake;
 
-    private bool dashOnCoolDown;
     public bool IsDashing { get; private set; }
     private bool invulnerable;
     private bool canAct;
     private bool canDash;
 
+    private Image magazineToSpawn;
+    private PlayerData info;
     private Rigidbody2D body;
-    private CameraObject cameraObject;
     
     private static Vector2 CursorPosition => Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
     private void Awake()
     {
         body = GetComponent<Rigidbody2D>();
-        Rend = GetComponentInChildren<SpriteRenderer>();
-        cameraObject = FindObjectOfType<CameraObject>();
-
-        currentHealth = maxHealth;
+        Rend = GetComponent<SpriteRenderer>();
+        shake = GetComponent<CinemachineImpulseSource>();
         
-        EnterDebug();
+        magazineToSpawn = Resources.Load("Prefabs/Weapon/PlayerWeapon/AmmoUI", typeof(Image)) as Image;
+        info = Resources.Load("Prefabs/Player/Data", typeof(PlayerData)) as PlayerData;
+    }
+
+    private void Start()
+    {
+        foreach (Image healthContainer in healthContainers)
+            healthContainer.enabled = false;
+        
+        currentHealth = info.MaxHealth;
     }
 
     private void Update()
@@ -69,7 +71,7 @@ public class Player : Character
         
         RotateTowardsMouse();
 
-        if (Input.GetKeyDown(KeyCode.LeftShift) && !dashOnCoolDown)
+        if (Input.GetKeyDown(KeyCode.LeftShift) && canDash)
             Dash();
 
         if (Input.GetKeyDown(KeyCode.Mouse1)) 
@@ -89,6 +91,9 @@ public class Player : Character
                     currentRangedWeapon.ThrowWeapon(CursorPosition);
                     currentRangedWeapon = null;
                 }
+
+                weaponImage.sprite = null;
+                pocketAmmoSprites.ForEach(s => Destroy(gameObject));
             }
 
             if (currentMeleeWeapon)
@@ -128,7 +133,7 @@ public class Player : Character
     private void Move()
     {
         Vector2 moveVector = InputVector();
-        Vector2 newPosition = body.position + moveSpeed * Time.fixedDeltaTime * moveVector;
+        Vector2 newPosition = body.position + info.MoveSpeed * Time.fixedDeltaTime * moveVector;
         body.MovePosition(newPosition);
     }
 
@@ -143,13 +148,13 @@ public class Player : Character
             return;
 
         IsDashing = true;
-        dashOnCoolDown = true;
+        canDash = false;
         StartCoroutine(CoolDownDash());
         StartCoroutine(DashMoving(directionDash));
         
         IEnumerator CoolDownDash()
         {
-            float time = dashCoolDown;
+            float time = info.DashCooldown;
 
             while (time > 0)
             {
@@ -157,13 +162,13 @@ public class Player : Character
                 yield return new WaitForSeconds(Time.fixedDeltaTime);
             }
 
-            dashOnCoolDown = false;
+            canDash = true;
         }
         
         IEnumerator DashMoving(Vector2 dirDash)
         {
-            float time = dashDuration;
-            float speed = dashSpeed;
+            float time = info.DashDuration;
+            float speed = info.DashSpeed;
             
             while (time > 0.1)
             {
@@ -177,7 +182,7 @@ public class Player : Character
                     if (Math.Abs(Vector2.Dot(dirDash, hitInfo.normal)) >= 0.98f)
                         break;
 
-                    newDirection = SlideCollision(dirDash, hitInfo) * (speed * time / dashDuration);
+                    newDirection = SlideCollision(dirDash, hitInfo) * (speed * time / info.DashDuration);
                 }
 
                 if (newDirection != Vector2.zero)
@@ -195,7 +200,7 @@ public class Player : Character
         }
     }
     
-    private Vector2 InputVector()
+    private static Vector2 InputVector()
     {
         Vector2 inputVector = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
 
@@ -221,11 +226,16 @@ public class Player : Character
                     pickup.PickUp(this);
                     return pickup;
                 }
+
+                if (hitInfo.TryGetComponent(out Weapon weapon))
+                    weapon.transform.parent = rangedWeaponContainer;
             }
 
             if (hitInfo.TryGetComponent(out IInteractable interactable))
             {
-                interactable.Interact();
+                if (interactable.Type == InteractType.Button)
+                    interactable.Interact();
+                
                 return null;
             }
         }
@@ -249,10 +259,43 @@ public class Player : Character
             }
             case PlayerRangedWeapon weapon:
             {
+                OnWeaponPickup?.Invoke();
+                
                 if (currentRangedWeapon)
+                {
                     currentRangedWeapon.CastOut(playerPosition);
 
+                    pocketAmmoSprites.ForEach(s => Destroy(s.gameObject));
+                    pocketAmmoSprites.Clear();
+                }
+                
                 currentRangedWeapon = weapon;
+                weaponImage.sprite = currentRangedWeapon.WeaponSprite;
+                
+                currentRangedWeapon.currentAmmoUI = new AmmunitionUI[currentRangedWeapon.MaxAmmo];
+
+                for (int i = 0; i < currentRangedWeapon.MaxAmmo; i++)
+                {
+                    AmmunitionUI UIToSpawn = currentRangedWeapon.currentAmmoUI[i] = Instantiate(currentRangedWeapon.AmmoUI, ammoContainer);
+                    
+                    if (i < currentRangedWeapon.CurrentAmmo)
+                        UIToSpawn.Reload();
+                    else
+                        UIToSpawn.Deplete();
+                }
+
+                if (ammoStack.ContainsKey(currentRangedWeapon.GetType()))
+                {
+                    int magazinesToSpawn = ammoStack[currentRangedWeapon.GetType()] % currentRangedWeapon.MaxAmmo;
+                    for (int i = 0; i < magazinesToSpawn; i++)
+                    {
+                        Image imageToSpawn = Instantiate(magazineToSpawn, pocketAmmoContainer);
+                        pocketAmmoSprites.Add(imageToSpawn);
+
+                        imageToSpawn.transform.localPosition = new Vector2(0, 30 * i);
+                    }    
+                }
+                
                 return;
             }
         }
@@ -264,13 +307,30 @@ public class Player : Character
             return;
         
         base.TakeDamage(damage, damageDirection);
+        shake.GenerateImpulseWithForce(1f);
         
         for (int i = 0; i < damage; i++) 
         {
             Image lastContainer = healthContainers.Last(h => h.enabled);
             lastContainer.enabled = false;
         }
-        
+
+        Collider2D[] collidersInRange = Physics2D.OverlapCircleAll(transform.position, 4f);
+        foreach (Collider2D coll in collidersInRange)
+        {
+            if (coll.TryGetComponent(out BotBullet _))
+            {
+                coll.gameObject.SetActive(false);
+                continue;                
+            }
+
+            if (coll.TryGetComponent(out Enemy enemy))
+            {
+                enemy.TakeDamage(0, transform.position - enemy.transform.position);
+                enemy.Stun();
+            }
+        }
+
         if (!invulnerable)
         {
             StartCoroutine(TimerInvulnerable());
@@ -279,16 +339,18 @@ public class Player : Character
 
         IEnumerator TimerInvulnerable()
         {
-            float time = defaultTimeInvul + 0.1f * (damage - 1);
+            Time.timeScale = 0.4f;
+            float time = info.HitInvulnerableTime + 0.1f * (damage - 1);
 
             invulnerable = true;
         
             while (time > 0)
             {
-                time -= Time.fixedDeltaTime;
-                yield return new WaitForSeconds(Time.fixedDeltaTime);
+                time -= Time.fixedUnscaledDeltaTime;
+                yield return new WaitForSeconds(Time.fixedUnscaledDeltaTime);
             }
 
+            Time.timeScale = 1f;
             invulnerable = false;
         }
 
@@ -296,7 +358,7 @@ public class Player : Character
         {
             damageDirection = damageDirection.normalized;
             
-            float time = (defaultTimeInvul + 0.1f * (damage - 1));
+            float time = (info.HitInvulnerableTime + 0.1f * (damage - 1));
             float distance = damage;
 
             float speed = distance / time;
@@ -317,13 +379,17 @@ public class Player : Character
 
     private void Reload(PlayerRangedWeapon reloadWeapon)
     {
-        foreach (Type ammoStackKey in ammoStack.Keys)
+        Type ammoType = reloadWeapon.GetType();
+        
+        if (ammoStack.ContainsKey(ammoType))
         {
-            if (ammoStackKey != reloadWeapon.GetType())
-                continue;
-            
-            ammoStack[ammoStackKey] -= reloadWeapon.Reload(ammoStack[ammoStackKey]);
-            return;
+            if (pocketAmmoSprites.Count != 0)
+            {
+                Image imageToDestroy = pocketAmmoSprites.Last();
+                pocketAmmoSprites.Remove(imageToDestroy);
+                ammoStack[ammoType] -= reloadWeapon.Reload(ammoStack[ammoType]);
+                Destroy(imageToDestroy.gameObject);
+            }
         }
     }
     
@@ -332,25 +398,14 @@ public class Player : Character
     protected override void Death()
     {
         base.Death();
-        cameraToEnable.enabled = true;
-        TeleportToLastCheckPoint();
-        RestoreHealth(maxHealth);
-    }
-
-    public void TeleportToLastCheckPoint()
-    {
-        Deactivate();
-
-        loader.rectTransform.DOScale(new Vector3(1, 1, 1), 1f).OnComplete(() =>
-        {
-            Activate();
-            transform.position = currentCheckPointPosition;
-            loader.rectTransform.DOScale(new Vector3(0, 0, 0), 1f);
-        });
+        RequireReload();
+        RestoreHealth(info.MaxHealth);
     }
 
     public override void Activate()
     {
+        base.Activate();
+        
         int i = 0;
         
         foreach (Image healthContainer in healthContainers)
@@ -363,13 +418,18 @@ public class Player : Character
         }
 
         canAct = true;
-        cameraObject.FindTarget();
     }
 
     public override void Deactivate()
     {
+        base.Deactivate();
+        
         canAct = false;
-        cameraObject.LoseTarget();
+    }
+
+    public void RequireReload()
+    {
+        OnReloadRequired?.Invoke();
     }
 
     public void NewCheckPoint(Transform newPoint)
@@ -379,7 +439,7 @@ public class Player : Character
 
     public void RestoreHealth(int amount)
     {
-        currentHealth = Mathf.Min(currentHealth + amount, maxHealth);
+        currentHealth = Mathf.Min(currentHealth + amount, info.MaxHealth);
         
         for (int i = 0; i < amount; i++)
         {
@@ -390,16 +450,21 @@ public class Player : Character
 
     public void RestoreAmmo(int amount, PlayerWeapon ammoType)
     {
-        foreach (Type keyValuePair in ammoStack.Keys)
-        {
-            if (keyValuePair == ammoType.GetType())
-            {
-                ammoStack[keyValuePair] += amount;
-                return;
-            }
-        }
+        Type type = ammoType.GetType();
 
-        ammoStack.Add(ammoType.GetType(), amount);
+        if (ammoStack.ContainsKey(type))
+            ammoStack[type] += amount;
+        else
+            ammoStack.Add(ammoType.GetType(), amount);
+        
+        Image imageToSpawn = Instantiate(magazineToSpawn, pocketAmmoContainer);
+
+        if (pocketAmmoSprites.Count != 0)
+            imageToSpawn.transform.localPosition = pocketAmmoSprites.Last().transform.localPosition + Vector3.up * 30f;
+        else
+            imageToSpawn.transform.localPosition = Vector3.zero;
+        
+        pocketAmmoSprites.Add(imageToSpawn);
     }
 
     public void AllowDash()
@@ -409,7 +474,7 @@ public class Player : Character
 
     public void IncreaseMaxHp(int amount)
     {
-        maxHealth += amount;
+        info.IncreaseMaxHealth(amount);
 
         for (int i = 0; i < amount; i++)
         {
@@ -418,16 +483,5 @@ public class Player : Character
         }
         
         RestoreHealth(amount);
-    }
-
-    private void EnterDebug()
-    {
-        if (debugMode)
-        {
-            Activate();
-            cameraObject.FindTarget();
-            FindObjectOfType<GameBeginner>().BeginGame();
-            transform.position = new Vector2(110, 0);
-        }
     }
 }

@@ -5,18 +5,23 @@ using UnityEngine;
 public abstract class PlayerRangedWeapon : PlayerWeapon
 {
     [SerializeField] protected Ammunition ammunitionPrefab;
+    [SerializeField] protected AmmunitionUI ammunitionUIPrefab;
+    [SerializeField] protected Sprite weaponUISprite;
     [SerializeField] protected float reloadDuration;
     [SerializeField] protected int maxNumberOfAmmo;
     
     [SerializeField] protected int currentAmmo;
+    public AmmunitionUI[] currentAmmoUI;
 
     [SerializeField] protected Transform attackPointTransform;
     [SerializeField] protected Transform ammoContainer;
 
     protected Pool<Ammunition> poolAmmo;
     protected Vector2 AttackPointPosition => attackPointTransform.position;
-
-    public Type AmmoType => ammunitionPrefab.GetType();
+    public int MaxAmmo => maxNumberOfAmmo;
+    public int CurrentAmmo => currentAmmo;
+    public AmmunitionUI AmmoUI => ammunitionUIPrefab;
+    public Sprite WeaponSprite => weaponUISprite;
 
     private void Start()
     {
@@ -34,14 +39,20 @@ public abstract class PlayerRangedWeapon : PlayerWeapon
         UpdateUI();
 
         currentAmmo -= 1;
+        currentAmmoUI[currentAmmo].Deplete();
+        
         poolAmmo.GetFreeElement(out Ammunition ammunition);
         Vector2 directionVector = (targetPointPosition - AttackPointPosition).normalized;
         ammunition.SetDirectionAndStart(directionVector, attackPointTransform.position);
+        AudioHandler.PlaySound(releaseSound);
         StartCoroutine(ReloadTimer());
     }
 
     public override void ThrowWeapon(Vector2 targetPointPosition)
     {
+        foreach (AmmunitionUI ammoUI in currentAmmoUI)
+            Destroy(ammoUI.gameObject);
+        
         poolAmmo.DestroyPool();
         base.ThrowWeapon(targetPointPosition);
     }
@@ -59,6 +70,11 @@ public abstract class PlayerRangedWeapon : PlayerWeapon
 
     public override void CastOut(Vector2 playerPosition)
     {
+        foreach (AmmunitionUI ammoUI in currentAmmoUI)
+            Destroy(ammoUI.gameObject);
+
+        currentAmmoUI = null;
+
         poolAmmo.DestroyPool();
         base.CastOut(playerPosition);
     }
@@ -73,10 +89,18 @@ public abstract class PlayerRangedWeapon : PlayerWeapon
         if (ammoInStock <= needToMaxAmmo)
         {
             currentAmmo += ammoInStock;
+
+            for (int i = 0; i < currentAmmo; i++)
+                currentAmmoUI[i].Reload();
+            
             return ammoInStock;
         }
 
         currentAmmo = maxNumberOfAmmo;
+        
+        for (int i = 0; i < currentAmmo; i++)
+            currentAmmoUI[i].Reload();
+        
         return needToMaxAmmo;
     }
 }

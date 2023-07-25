@@ -21,6 +21,7 @@ public class MachineGun : BotRangeWeapon
         poolObject.GetFreeElement(out BotBullet ammunition);
         Vector2 directionVector = (targetPointPosition - FirePointPosition).normalized;
         ammunition.SetDirectionAndStart(directionVector, FirePointPosition);
+        AudioHandler.PlaySound(releaseSound);
         StartCoroutine(DelayAfterAttack());
         
         IEnumerator DelayAfterAttack()

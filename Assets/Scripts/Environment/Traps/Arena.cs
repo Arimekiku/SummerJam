@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.VFX;
 using Random = UnityEngine.Random;
 
@@ -15,6 +16,9 @@ public class Arena : MonoBehaviour
     [SerializeField] private ArenaDoor door;
     [SerializeField] private Player player;
     [SerializeField] private EventTrigger trigger;
+    [SerializeField] private AudioClip spawnSound;
+    [SerializeField] private UnityEvent afterArena;
+    [SerializeField] private UnityEvent beforeArena;
 
     private Collider2D coll;
     private readonly List<Enemy> enemiesInArena = new List<Enemy>();
@@ -22,13 +26,11 @@ public class Arena : MonoBehaviour
     private bool completed;
 
     public event Action OnArenaEnds;
-    public ArenaDoor Door => door;
 
     private void Awake()
     {
-        SetupArena();
         coll = GetComponent<Collider2D>();
-        player.OnDeathEvent += OnPlayerDeath;
+        player.OnDeath += OnPlayerDeath;
     }
 
     private void OnEnemyDeath()
@@ -45,27 +47,27 @@ public class Arena : MonoBehaviour
     private void OnPlayerDeath()
     {
         foreach (Enemy enemy in enemiesInArena)
-        {
             Destroy(enemy.gameObject);
-        }
-        
+
         enemiesInArena.Clear();
-        SetupArena();
 
         if (completed)
         {
             OnArenaEnds.Invoke();
+            afterArena.Invoke();
         }
         else
         {
             trigger.gameObject.SetActive(true);
-            Door.Open();
+            door.Open();
         }
     }
 
     public void SetupArena()
     {
         copiedValues = new List<int>(wavesValues);
+        door.Close();
+        beforeArena.Invoke();
     }
 
     public void SpawnNextWave()
@@ -77,10 +79,11 @@ public class Arena : MonoBehaviour
         {
             Enemy newEnemy = Instantiate(enemyPrefabs[Random.Range(0, enemyPrefabs.Count)], GetValidSpawnPosition(), quaternion.identity);
             Instantiate(spawnVFX, newEnemy.transform.position, quaternion.identity);
-            newEnemy.OnDeathEvent += OnEnemyDeath;
+            newEnemy.OnDeath += OnEnemyDeath;
             
             enemiesInArena.Add(newEnemy);
         }
+        AudioHandler.PlaySound(spawnSound);
 
         Vector2 GetValidSpawnPosition()
         {

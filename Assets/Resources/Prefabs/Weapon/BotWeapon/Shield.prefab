@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7205928610296916990}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.014, y: 0.205, z: 0}
+  m_LocalPosition: {x: 0.014, y: 0.175, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -147,7 +147,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0.075}
@@ -177,10 +177,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rateOfAttackPerSec: 0
   damage: 1
+  releaseSound: {fileID: 8300000, guid: af43d42684e2dd44b99e302f38029b57, type: 3}
   ammoPrefab: {fileID: 2299077028281836041, guid: a2ef5a9189742b0408c474f50a3a6379, type: 3}
   ammoContainer: {fileID: 0}
   firePoint: {fileID: 5373166134456740303}
-  reloadDuration: 1
+  reloadDuration: 0.5
   maxNumberOfAmmo: 1
-  countBullet: 10
-  angleAttack: 75
+  countBullet: 6
+  angleAttack: 90

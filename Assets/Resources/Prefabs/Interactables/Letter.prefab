@@ -9,8 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3330987037550409980}
-  - component: {fileID: 6170271033811859263}
   - component: {fileID: 2121559797106305369}
+  - component: {fileID: 8048274643770680610}
+  - component: {fileID: 6170271033811859263}
   m_Layer: 6
   m_Name: Letter
   m_TagString: Untagged
@@ -29,31 +30,10 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 2152986699136165546}
+  m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6170271033811859263
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1115969846810831890}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 06e9218c48a824f4aba8327342c5f008, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dialogType: 0
-  dialogueBox: {fileID: 0}
-  timeBeforeExecuting: 0
-  onDialogueEnd:
-    m_PersistentCalls:
-      m_Calls: []
-  phrases: []
-  actors: []
 --- !u!58 &2121559797106305369
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -89,45 +69,13 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
---- !u!1 &3476561684401029878
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2152986699136165546}
-  - component: {fileID: 8950576951932400310}
-  m_Layer: 6
-  m_Name: Sprite
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2152986699136165546
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3476561684401029878}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3330987037550409980}
-  m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &8950576951932400310
+--- !u!212 &8048274643770680610
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3476561684401029878}
+  m_GameObject: {fileID: 1115969846810831890}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -173,3 +121,32 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &6170271033811859263
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1115969846810831890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06e9218c48a824f4aba8327342c5f008, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogType: 0
+  dialogueBox: {fileID: 0}
+  timeBeforeExecuting: 0
+  onDialogueEnd:
+    m_PersistentCalls:
+      m_Calls: []
+  phrases:
+  - actorID: 0
+    phraseMessage: This is big room letter
+  - actorID: 0
+    phraseMessage: There will be some enemies
+  - actorID: 0
+    phraseMessage: And a lot of roots
+  actors:
+  - actorAvatar: {fileID: 0}
+    actorName: 
+    actorBox: {fileID: 0}

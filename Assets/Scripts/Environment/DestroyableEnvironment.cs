@@ -9,6 +9,7 @@ public class DestroyableEnvironment : MonoBehaviour, IInteractable, IDestroyed
     [SerializeField] private GameObject[] lootItems;
     [SerializeField] private DestroyablePiece destroyablePrefab;
     [SerializeField] private ParticleSystem particles;
+    [SerializeField] private AudioClip[] impactSounds;
     
     public InteractType Type { get; } = InteractType.Trigger;
 
@@ -24,7 +25,30 @@ public class DestroyableEnvironment : MonoBehaviour, IInteractable, IDestroyed
             isLootable = true;
 
         if (isLootable)
+        {
             GetComponent<SpriteRenderer>().sprite = paintedParent;
+            particles.textureSheetAnimation.SetSprite(0, paintedSprites[0]);
+
+            foreach (Sprite sprite in paintedSprites)
+            {
+                if (sprite == paintedSprites[0])
+                    continue;
+                
+                particles.textureSheetAnimation.AddSprite(sprite);
+            }
+        }
+        else
+        {
+            particles.textureSheetAnimation.SetSprite(0, possibleSprites[0]);
+
+            foreach (Sprite sprite in possibleSprites)
+            {
+                if (sprite == possibleSprites[0])
+                    continue;
+                
+                particles.textureSheetAnimation.AddSprite(sprite);
+            }
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -71,5 +95,6 @@ public class DestroyableEnvironment : MonoBehaviour, IInteractable, IDestroyed
         }
         
         Destroy(gameObject);
+        AudioHandler.PlaySound(impactSounds);
     }
 }

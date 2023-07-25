@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4501932145316310139}
+  - component: {fileID: -5417079606563748748}
   - component: {fileID: 7802527046425733664}
   - component: {fileID: 4336818474280421628}
   - component: {fileID: 3623526211640379414}
@@ -33,8 +34,61 @@ Transform:
   m_Children:
   - {fileID: 6035502881518077389}
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-5417079606563748748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 916834153646180204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ImpulseDefinition:
+    m_ImpulseChannel: 1
+    m_ImpulseShape: 4
+    m_CustomImpulseShape:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_ImpulseDuration: 0.3
+    m_ImpulseType: 0
+    m_DissipationRate: 0.25
+    m_RawSignal: {fileID: 0}
+    m_AmplitudeGain: 1
+    m_FrequencyGain: 1
+    m_RepeatMode: 0
+    m_Randomize: 1
+    m_TimeEnvelope:
+      m_AttackShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_DecayShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_AttackTime: 0
+      m_SustainTime: 0.2
+      m_DecayTime: 0.7
+      m_ScaleWithImpact: 1
+      m_HoldForever: 0
+    m_ImpactRadius: 100
+    m_DirectionMode: 0
+    m_DissipationMode: 2
+    m_DissipationDistance: 100
+    m_PropagationSpeed: 343
+  m_DefaultVelocity: {x: 0.1, y: 0.15, z: 0}
 --- !u!114 &7802527046425733664
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -47,11 +101,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 885c980b41ed5274abba4cd9ea97a8b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentHealth: 3
+  currentHealth: 2
+  deathClip: {fileID: 8300000, guid: e0b7057921e368f428bf80c8e2d2cd2d, type: 3}
+  deathEffect: {fileID: 5777921196442322182, guid: d6ac1013a55c1fd4f8eb8ace636bd57a, type: 3}
+  shake: {fileID: -5417079606563748748}
+  enemyAmmo: {fileID: 7618758957945853440, guid: bf1af1174cc124f48ab2f98fb51468c5, type: 3}
+  data: {fileID: 11400000, guid: 74759fe437446dd4cbb9c22e394b2658, type: 2}
   weapon: {fileID: 2807420020885865575}
-  rangeDetected: 5
-  speedDamageBust: 1
-  speedRotate: 1
 --- !u!212 &4336818474280421628
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -133,7 +189,7 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0.05, y: 0.05}
@@ -232,10 +288,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6035502881518077389}
     m_Modifications:
-    - target: {fileID: 2841413261028247015, guid: 5af9397c5860d674a97bf26f9e0e6123, type: 3}
-      propertyPath: m_IsTrigger
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3674726406378937548, guid: 5af9397c5860d674a97bf26f9e0e6123, type: 3}
       propertyPath: m_RootOrder
       value: -1
@@ -279,10 +331,6 @@ PrefabInstance:
     - target: {fileID: 3674726406378937548, guid: 5af9397c5860d674a97bf26f9e0e6123, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5373166134456740303, guid: 5af9397c5860d674a97bf26f9e0e6123, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.175
       objectReference: {fileID: 0}
     - target: {fileID: 9216680881905409170, guid: 5af9397c5860d674a97bf26f9e0e6123, type: 3}
       propertyPath: m_Name

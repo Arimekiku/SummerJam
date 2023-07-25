@@ -48,10 +48,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rateOfAttackPerSec: 1
   damage: 1
+  releaseSound: {fileID: 8300000, guid: 726dc59680309d74785587e3b9878303, type: 3}
   defaultSprite: {fileID: 21300000, guid: 606bf3c0dcf081f47a4c689e5149ec57, type: 3}
   paintedSprite: {fileID: 21300000, guid: 5b8e52a59f8b0194aacf7a1891d60714, type: 3}
   speedThrow: 0
-  speedThrowRoration: 0
+  speedThrowRotation: 0
+  throwClip: {fileID: 0}
   ammunitionPrefab: {fileID: 4687868528885955999, guid: f59e330ea941bb440af17a6486a302c0, type: 3}
   reloadDuration: 1
   maxNumberOfAmmo: 1

@@ -1,11 +1,13 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 
 [RequireComponent(typeof(Rigidbody2D), typeof(BoxCollider2D))]
 public abstract class Ammunition : MonoBehaviour, IDestroyed
 {
 	[SerializeField] private float speed = 6;
+	[SerializeField] protected AudioClip[] impactSounds;
 	
 	protected int damage;
 

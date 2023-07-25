@@ -131,6 +131,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rateOfAttackPerSec: 0
   damage: 1
+  releaseSound: {fileID: 8300000, guid: af43d42684e2dd44b99e302f38029b57, type: 3}
   ammoPrefab: {fileID: 0}
   ammoContainer: {fileID: 0}
   firePoint: {fileID: 3977323325774900477}

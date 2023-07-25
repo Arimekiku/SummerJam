@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1844178274335771893}
   - component: {fileID: 3713708567599726122}
-  m_Layer: 10
+  m_Layer: 7
   m_Name: Hand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -96,8 +96,9 @@ GameObject:
   - component: {fileID: 7021469988638362001}
   - component: {fileID: 1872561318823632717}
   - component: {fileID: 8186671461671056146}
+  - component: {fileID: -3820546887915496806}
   - component: {fileID: 4160910545380480907}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Berserker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -235,6 +236,59 @@ CircleCollider2D:
   m_Offset: {x: 0.05, y: 0.05}
   serializedVersion: 2
   m_Radius: 0.29
+--- !u!114 &-3820546887915496806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3693882664869470024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ImpulseDefinition:
+    m_ImpulseChannel: 1
+    m_ImpulseShape: 3
+    m_CustomImpulseShape:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_ImpulseDuration: 0.4
+    m_ImpulseType: 0
+    m_DissipationRate: 0.25
+    m_RawSignal: {fileID: 0}
+    m_AmplitudeGain: 1
+    m_FrequencyGain: 1
+    m_RepeatMode: 0
+    m_Randomize: 1
+    m_TimeEnvelope:
+      m_AttackShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_DecayShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_AttackTime: 0
+      m_SustainTime: 0.2
+      m_DecayTime: 0.7
+      m_ScaleWithImpact: 1
+      m_HoldForever: 0
+    m_ImpactRadius: 100
+    m_DirectionMode: 0
+    m_DissipationMode: 2
+    m_DissipationDistance: 100
+    m_PropagationSpeed: 343
+  m_DefaultVelocity: {x: -0.2, y: 0.2, z: 0}
 --- !u!114 &4160910545380480907
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -247,10 +301,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ae770f2af76b2a4ba51d49db3a42ba5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentHealth: 3
-  weapon: {fileID: 0}
-  rangeDetected: 5
-  speedDamageBust: 1
+  currentHealth: 6
+  deathClip: {fileID: 8300000, guid: e0b7057921e368f428bf80c8e2d2cd2d, type: 3}
+  deathEffect: {fileID: 5777921196442322182, guid: d6ac1013a55c1fd4f8eb8ace636bd57a, type: 3}
+  shake: {fileID: -3820546887915496806}
+  enemyAmmo: {fileID: 7618758957945853440, guid: bf1af1174cc124f48ab2f98fb51468c5, type: 3}
+  data: {fileID: 11400000, guid: d9e71290efa6daf4d8fe27f4b1b82c40, type: 2}
   moveSpeed: 5
   timeToPreparationJump: 1
   timeToPreparationThrow: 1
@@ -269,7 +325,7 @@ GameObject:
   m_Component:
   - component: {fileID: 167508366029623997}
   - component: {fileID: 4704262522611092368}
-  m_Layer: 10
+  m_Layer: 7
   m_Name: Hand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -355,7 +411,7 @@ GameObject:
   - component: {fileID: 4200285156410664355}
   - component: {fileID: 4053899267899691380}
   - component: {fileID: 2521241824657010360}
-  m_Layer: 10
+  m_Layer: 7
   m_Name: LeftAxe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -489,12 +545,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rateOfAttackPerSec: 0
   damage: 1
+  releaseSound: {fileID: 0}
   speedRotate: 720
-  speedThrowRotation: 0
-  speedFlying: 0
+  speedThrowRotation: 360
+  speedFlying: 5
   rotateRadius: 0.7
   indexAxe: 2
   coef: 0
+  throwClip: {fileID: 8300000, guid: 529d9181f39f33b4985782b6d6fbf48b, type: 3}
+  rotateClip: {fileID: 8300000, guid: 075670aa1807655489fd228435358413, type: 3}
 --- !u!1 &7359258027208287963
 GameObject:
   m_ObjectHideFlags: 0
@@ -507,7 +566,7 @@ GameObject:
   - component: {fileID: 6116773817874141139}
   - component: {fileID: 1144219436698351595}
   - component: {fileID: 4677007107041101915}
-  m_Layer: 10
+  m_Layer: 7
   m_Name: RightAxe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -641,9 +700,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rateOfAttackPerSec: 0
   damage: 1
+  releaseSound: {fileID: 0}
   speedRotate: 720
   speedThrowRotation: 360
   speedFlying: 5
   rotateRadius: 0.7
   indexAxe: 1
   coef: 0
+  throwClip: {fileID: 8300000, guid: 529d9181f39f33b4985782b6d6fbf48b, type: 3}
+  rotateClip: {fileID: 8300000, guid: 075670aa1807655489fd228435358413, type: 3}

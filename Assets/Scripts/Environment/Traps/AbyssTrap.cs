@@ -9,7 +9,7 @@ public class AbyssTrap : MonoBehaviour
             if (player.IsDashing)
                 return;
             
-            player.TeleportToLastCheckPoint();
+            player.RequireReload();
         }
     }
 }

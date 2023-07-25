@@ -180,6 +180,7 @@ MonoBehaviour:
   firstPoint: {fileID: 8431211367505390704}
   secondPoint: {fileID: 7596228854816560801}
   arrowPrefab: {fileID: 1090462973757473359, guid: aa27d14e44edad74a86e387b6dd69583, type: 3}
+  releaseClip: {fileID: 8300000, guid: 726dc59680309d74785587e3b9878303, type: 3}
 --- !u!1 &3764988749349872427
 GameObject:
   m_ObjectHideFlags: 0
