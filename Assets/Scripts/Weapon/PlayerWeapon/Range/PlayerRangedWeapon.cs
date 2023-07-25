@@ -101,6 +101,6 @@ public abstract class PlayerRangedWeapon : PlayerWeapon
         for (int i = 0; i < currentAmmo; i++)
             currentAmmoUI[i].Reload();
         
-        return needToMaxAmmo;
+        return maxNumberOfAmmo;
     }
 }

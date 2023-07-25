@@ -7,16 +7,19 @@ using Random = UnityEngine.Random;
 [RequireComponent(typeof(Rigidbody2D))]
 public class Berserk : Enemy
 {
-    [SerializeField] private float moveSpeed;
-    [SerializeField] private float timeToPreparationJump;
-    [SerializeField] private float timeToPreparationThrow;
-    [SerializeField] private float jumpCoolDownTime;
-    [SerializeField] private float throwCoolDownTime;
-    [SerializeField] private List<BerserkAxe> axes = new List<BerserkAxe>();
+    [Space, SerializeField] private List<BerserkAxe> axes = new List<BerserkAxe>();
 
+    private new BerserkData data;
     private Rigidbody2D rb;
     private bool isReady = true;
     private bool onTheJump;
+
+    private void Awake()
+    {
+        data = base.data as BerserkData;
+        
+        rb = GetComponent<Rigidbody2D>();
+    }
 
     protected override void Start()
     {
@@ -24,8 +27,6 @@ public class Berserk : Enemy
         
         foreach (BerserkAxe berserkAxe in axes)
             berserkAxe.InitializedWeapon();
-
-        rb = GetComponent<Rigidbody2D>();
     }
 
     private void FixedUpdate()
@@ -51,12 +52,12 @@ public class Berserk : Enemy
         
         if (randValue < 70)
         {
-            yield return StartCoroutine(Preparation(timeToPreparationJump));
+            yield return StartCoroutine(Preparation(data.JumpPrepareTime));
             StartCoroutine(Jump(finishPosition));
         }
         else
         {
-            yield return StartCoroutine(Preparation(timeToPreparationThrow));
+            yield return StartCoroutine(Preparation(data.ThrowPrepareTime));
             StartCoroutine(ThrowAxe(finishPosition));
         }
 
@@ -81,7 +82,7 @@ public class Berserk : Enemy
         Vector2 directionJump = finishPosition - rb.position;
 
         float distance = Vector2.Distance(finishPosition, transform.position);
-        float time = distance / moveSpeed;
+        float time = distance / data.MoveSpeed;
 
         directionJump = directionJump.normalized;
 
@@ -90,7 +91,7 @@ public class Berserk : Enemy
 
         while (time > 0)
         {
-            Vector2 newPosition = rb.position + moveSpeed * Time.fixedDeltaTime * directionJump;
+            Vector2 newPosition = rb.position + data.MoveSpeed * Time.fixedDeltaTime * directionJump;
             rb.MovePosition(newPosition);
 
             time -= Time.fixedDeltaTime;
@@ -98,7 +99,7 @@ public class Berserk : Enemy
         }
 
         onTheJump = false;
-        StartCoroutine(CoolDownAttack(jumpCoolDownTime));
+        StartCoroutine(CoolDownAttack(data.JumpCooldownTime));
     }
 
     private IEnumerator ThrowAxe(Vector2 targetPosition)
@@ -116,7 +117,7 @@ public class Berserk : Enemy
             yield return new WaitForSeconds(Time.fixedDeltaTime);
         }
 
-        StartCoroutine(CoolDownAttack(throwCoolDownTime));
+        StartCoroutine(CoolDownAttack(data.ThrowCooldownTime));
     }
     
     private IEnumerator CoolDownAttack(float timeCoolDown)

@@ -1,9 +1,10 @@
 using System.Collections;
 using UnityEngine;
 
+
 public class Shooter : Enemy
 {
-    [SerializeField] private BotWeapon weapon;
+    [Space, SerializeField] private BotWeapon weapon;
     [SerializeField] private BulletDetector bulletDetector;
 
     private new ShooterData data;

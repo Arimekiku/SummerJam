@@ -6,7 +6,7 @@ public class Checkpoint : MonoBehaviour
     {
         if (collision.TryGetComponent(out Player player)) 
         {
-            player.currentCheckPointPosition = transform.position;
+            player.NewCheckPoint(transform);
             GetComponent<Collider2D>().enabled = false;
         }
     }

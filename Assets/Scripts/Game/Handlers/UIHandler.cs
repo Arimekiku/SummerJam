@@ -20,7 +20,7 @@ public class UIHandler : MonoBehaviour
         loader.rectTransform.DOScale(new Vector3(1, 1, 1), 1f).OnComplete(() =>
         {
             player.Activate();
-            player.transform.position = player.currentCheckPointPosition;
+            player.transform.position = player.CurrentCheckPointPosition;
             loader.rectTransform.DOScale(new Vector3(0, 0, 0), 1f);
         });
     }

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Gunner : Enemy
 {
-    [SerializeField] private MachineGun weapon;
+    [Space, SerializeField] private MachineGun weapon;
 
     private new GunnerData data;
 

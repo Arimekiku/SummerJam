@@ -1,39 +1,26 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Cinemachine;
 using UnityEngine;
-using UnityEngine.UI;
 
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class Player : Character
 {
-    [SerializeField] private LayerMask levelLayer;
-
     [SerializeField] private Transform rangedWeaponContainer;
     [SerializeField] private Transform meleeWeaponContainer;
 
-    [SerializeField] private List<Image> healthContainers;
-    [SerializeField] private Transform ammoContainer;
-    [SerializeField] private Transform pocketAmmoContainer;
-    [SerializeField] private Image weaponImage;
-
-    [NonSerialized] public Vector2 currentCheckPointPosition;
-    
     public event Action OnWeaponPickup;
     public event Action OnReloadRequired;
+    public Vector2 CurrentCheckPointPosition { get; private set; }
     
-    public Transform MeleeWeaponContainer => meleeWeaponContainer;
-    public Transform RangedWeaponContainer => rangedWeaponContainer;
     public SpriteRenderer Rend { get; private set; }
 
     private PlayerMeleeWeapon currentMeleeWeapon;
     private PlayerRangedWeapon currentRangedWeapon;
 
     private readonly Dictionary<Type, int> ammoStack = new Dictionary<Type, int>();
-    private List<Image> pocketAmmoSprites = new List<Image>();
     private CinemachineImpulseSource shake;
 
     public bool IsDashing { get; private set; }
@@ -41,28 +28,24 @@ public class Player : Character
     private bool canAct;
     private bool canDash;
 
-    private Image magazineToSpawn;
-    private PlayerData info;
+    private PlayerUI uiHandler;
+    private PlayerData data;
     private Rigidbody2D body;
     
-    private static Vector2 CursorPosition => Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
     private void Awake()
     {
         body = GetComponent<Rigidbody2D>();
         Rend = GetComponent<SpriteRenderer>();
         shake = GetComponent<CinemachineImpulseSource>();
-        
-        magazineToSpawn = Resources.Load("Prefabs/Weapon/PlayerWeapon/AmmoUI", typeof(Image)) as Image;
-        info = Resources.Load("Prefabs/Player/Data", typeof(PlayerData)) as PlayerData;
+        uiHandler = GetComponent<PlayerUI>();
+
+        data = Resources.Load("Prefabs/Player/Data", typeof(PlayerData)) as PlayerData;
     }
 
     private void Start()
     {
-        foreach (Image healthContainer in healthContainers)
-            healthContainer.enabled = false;
-        
-        currentHealth = info.MaxHealth;
+        currentHealth = data.MaxHealth;
+        uiHandler.UpdateHealth(currentHealth);
     }
 
     private void Update()
@@ -77,11 +60,11 @@ public class Player : Character
 
         if (Input.GetKeyDown(KeyCode.Mouse1)) 
             if (currentMeleeWeapon)
-                currentMeleeWeapon.Attack(CursorPosition);
+                currentMeleeWeapon.Attack(data.CursorPosition);
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
             if (currentRangedWeapon)
-                currentRangedWeapon.Attack(CursorPosition);
+                currentRangedWeapon.Attack(data.CursorPosition);
 
         if (Input.GetKeyDown(KeyCode.Q))
         {
@@ -89,17 +72,15 @@ public class Player : Character
             {
                 if (currentRangedWeapon is not Bow)
                 {
-                    currentRangedWeapon.ThrowWeapon(CursorPosition);
+                    currentRangedWeapon.ThrowWeapon(data.CursorPosition);
+                    uiHandler.ClearWeapon();
                     currentRangedWeapon = null;
                 }
-
-                weaponImage.sprite = null;
-                pocketAmmoSprites.ForEach(s => Destroy(gameObject));
             }
 
             if (currentMeleeWeapon)
             {
-                currentMeleeWeapon.ThrowWeapon(CursorPosition);
+                currentMeleeWeapon.ThrowWeapon(data.CursorPosition);
                 currentRangedWeapon = null;
             }
         }
@@ -112,10 +93,8 @@ public class Player : Character
         }
 
         if (Input.GetKeyDown(KeyCode.R))
-        {
             if(currentRangedWeapon)
                 Reload(currentRangedWeapon);
-        }
     }
 
     private void FixedUpdate()
@@ -126,15 +105,15 @@ public class Player : Character
 
     private void RotateTowardsMouse()
     {
-        Vector2 lookDirection = CursorPosition - body.position;
+        Vector2 lookDirection = data.CursorPosition - body.position;
         float angle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0f, 0f, angle - 90f);
     }
 
     private void Move()
     {
-        Vector2 moveVector = InputVector();
-        Vector2 newPosition = body.position + info.MoveSpeed * Time.fixedDeltaTime * moveVector;
+        Vector2 moveVector = PlayerData.GetInputVector();
+        Vector2 newPosition = body.position + data.MoveSpeed * Time.fixedDeltaTime * moveVector;
         body.MovePosition(newPosition);
     }
 
@@ -145,17 +124,18 @@ public class Player : Character
         
         Vector2 directionDash = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
 
-        if (directionDash == Vector2.zero) 
-            return;
+        if (directionDash == Vector2.zero)
+            directionDash = transform.up;
 
         IsDashing = true;
         canDash = false;
+        
         StartCoroutine(CoolDownDash());
         StartCoroutine(DashMoving(directionDash));
         
         IEnumerator CoolDownDash()
         {
-            float time = info.DashCooldown;
+            float time = data.DashCooldown;
 
             while (time > 0)
             {
@@ -168,22 +148,22 @@ public class Player : Character
         
         IEnumerator DashMoving(Vector2 dirDash)
         {
-            float time = info.DashDuration;
-            float speed = info.DashSpeed;
+            float time = data.DashDuration;
+            float speed = data.DashSpeed;
             
             while (time > 0.1)
             {
                 Vector2 newPosition = body.position + speed * Time.fixedDeltaTime * dirDash;
                 Vector2 newDirection = Vector2.zero;
 
-                RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, dirDash, 0.8f, levelLayer);
+                RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, dirDash, 0.8f);
 
-                if (hitInfo)
+                if (!hitInfo.collider.isTrigger)
                 {
                     if (Math.Abs(Vector2.Dot(dirDash, hitInfo.normal)) >= 0.98f)
                         break;
 
-                    newDirection = SlideCollision(dirDash, hitInfo) * (speed * time / info.DashDuration);
+                    newDirection = SlideCollision(dirDash, hitInfo) * (speed * time / data.DashDuration);
                 }
 
                 if (newDirection != Vector2.zero)
@@ -199,16 +179,6 @@ public class Player : Character
             
             Vector3 SlideCollision(Vector2 direction, RaycastHit2D hitInfo) => Vector3.ProjectOnPlane(direction, hitInfo.normal);
         }
-    }
-    
-    private static Vector2 InputVector()
-    {
-        Vector2 inputVector = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-
-        if (inputVector.magnitude > 1) 
-            inputVector = inputVector.normalized;
-
-        return inputVector;
     }
 
     private IPickupable DetectPickup()
@@ -266,37 +236,12 @@ public class Player : Character
                 {
                     currentRangedWeapon.CastOut(playerPosition);
 
-                    pocketAmmoSprites.ForEach(s => Destroy(s.gameObject));
-                    pocketAmmoSprites.Clear();
+                    uiHandler.ClearWeapon();
                 }
                 
                 currentRangedWeapon = weapon;
-                weaponImage.sprite = currentRangedWeapon.WeaponSprite;
-                
-                currentRangedWeapon.currentAmmoUI = new AmmunitionUI[currentRangedWeapon.MaxAmmo];
+                uiHandler.UpdateWeapon(currentRangedWeapon, ammoStack);
 
-                for (int i = 0; i < currentRangedWeapon.MaxAmmo; i++)
-                {
-                    AmmunitionUI UIToSpawn = currentRangedWeapon.currentAmmoUI[i] = Instantiate(currentRangedWeapon.AmmoUI, ammoContainer);
-                    
-                    if (i < currentRangedWeapon.CurrentAmmo)
-                        UIToSpawn.Reload();
-                    else
-                        UIToSpawn.Deplete();
-                }
-
-                if (ammoStack.ContainsKey(currentRangedWeapon.GetType()))
-                {
-                    int magazinesToSpawn = ammoStack[currentRangedWeapon.GetType()] % currentRangedWeapon.MaxAmmo;
-                    for (int i = 0; i < magazinesToSpawn; i++)
-                    {
-                        Image imageToSpawn = Instantiate(magazineToSpawn, pocketAmmoContainer);
-                        pocketAmmoSprites.Add(imageToSpawn);
-
-                        imageToSpawn.transform.localPosition = new Vector2(0, 30 * i);
-                    }    
-                }
-                
                 return;
             }
         }
@@ -310,11 +255,7 @@ public class Player : Character
         base.TakeDamage(damage, damageDirection);
         shake.GenerateImpulseWithForce(1f);
         
-        for (int i = 0; i < damage; i++) 
-        {
-            Image lastContainer = healthContainers.Last(h => h.enabled);
-            lastContainer.enabled = false;
-        }
+        uiHandler.UpdateHealth(currentHealth);
 
         Collider2D[] collidersInRange = Physics2D.OverlapCircleAll(transform.position, 4f);
         foreach (Collider2D coll in collidersInRange)
@@ -341,7 +282,7 @@ public class Player : Character
         IEnumerator TimerInvulnerable()
         {
             Time.timeScale = 0.4f;
-            float time = info.HitInvulnerableTime + 0.1f * (damage - 1);
+            float time = data.HitInvulnerableTime + 0.1f * (damage - 1);
 
             invulnerable = true;
         
@@ -359,7 +300,7 @@ public class Player : Character
         {
             damageDirection = damageDirection.normalized;
             
-            float time = (info.HitInvulnerableTime + 0.1f * (damage - 1));
+            float time = (data.HitInvulnerableTime + 0.1f * (damage - 1));
             float distance = damage;
 
             float speed = distance / time;
@@ -381,17 +322,12 @@ public class Player : Character
     private void Reload(PlayerRangedWeapon reloadWeapon)
     {
         Type ammoType = reloadWeapon.GetType();
+
+        if (!ammoStack.TryGetValue(ammoType, out int ammoCount))
+            return;
         
-        if (ammoStack.ContainsKey(ammoType))
-        {
-            if (pocketAmmoSprites.Count != 0)
-            {
-                Image imageToDestroy = pocketAmmoSprites.Last();
-                pocketAmmoSprites.Remove(imageToDestroy);
-                ammoStack[ammoType] -= reloadWeapon.Reload(ammoStack[ammoType]);
-                Destroy(imageToDestroy.gameObject);
-            }
-        }
+        ammoStack[ammoType] -= reloadWeapon.Reload(ammoCount);
+        uiHandler.DepleteAmmo();
     }
     
     public bool IgnoreDamage() => IsDashing || invulnerable;
@@ -400,23 +336,14 @@ public class Player : Character
     {
         base.Death();
         RequireReload();
-        RestoreHealth(info.MaxHealth);
+        RestoreHealth(data.MaxHealth);
     }
 
     public override void Activate()
     {
         base.Activate();
         
-        int i = 0;
-        
-        foreach (Image healthContainer in healthContainers)
-        {
-            if (healthContainer.enabled == false)
-                healthContainer.enabled = true;
-
-            if (++i == currentHealth)
-                break;
-        }
+        uiHandler.UpdateHealth(currentHealth);
 
         canAct = true;
     }
@@ -435,18 +362,14 @@ public class Player : Character
 
     public void NewCheckPoint(Transform newPoint)
     {
-        currentCheckPointPosition = newPoint.position;
+        CurrentCheckPointPosition = newPoint.position;
     }
 
     public void RestoreHealth(int amount)
     {
-        currentHealth = Mathf.Min(currentHealth + amount, info.MaxHealth);
+        currentHealth = Mathf.Min(currentHealth + amount, data.MaxHealth);
         
-        for (int i = 0; i < amount; i++)
-        {
-            Image firstContainer = healthContainers.First(h => h.enabled == false);
-            firstContainer.enabled = true;
-        }
+        uiHandler.UpdateHealth(currentHealth);
     }
 
     public void RestoreAmmo(int amount, PlayerWeapon ammoType)
@@ -458,14 +381,7 @@ public class Player : Character
         else
             ammoStack.Add(ammoType.GetType(), amount);
         
-        Image imageToSpawn = Instantiate(magazineToSpawn, pocketAmmoContainer);
-
-        if (pocketAmmoSprites.Count != 0)
-            imageToSpawn.transform.localPosition = pocketAmmoSprites.Last().transform.localPosition + Vector3.up * 30f;
-        else
-            imageToSpawn.transform.localPosition = Vector3.zero;
-        
-        pocketAmmoSprites.Add(imageToSpawn);
+        uiHandler.RestoreAmmo();
     }
 
     public void AllowDash()
@@ -475,14 +391,9 @@ public class Player : Character
 
     public void IncreaseMaxHp(int amount)
     {
-        info.IncreaseMaxHealth(amount);
-
-        for (int i = 0; i < amount; i++)
-        {
-            Image firstContainer = healthContainers.First(h => h.gameObject.activeSelf == false);
-            firstContainer.gameObject.SetActive(true);
-        }
+        data.IncreaseMaxHealth(amount);
         
         RestoreHealth(amount);
+        uiHandler.UpdateHealth(currentHealth);
     }
 }

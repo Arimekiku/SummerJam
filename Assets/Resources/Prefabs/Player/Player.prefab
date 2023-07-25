@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1864164252353137267}
   - component: {fileID: 1419012427719453217}
   - component: {fileID: 4170871644792110408}
+  - component: {fileID: 1375706292891146570}
   - component: {fileID: 134537149820769812}
   m_Layer: 8
   m_Name: Player
@@ -35,7 +36,7 @@ Transform:
   m_Children:
   - {fileID: 4857574949029544374}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &8583268974011018339
 Rigidbody2D:
@@ -167,12 +168,24 @@ MonoBehaviour:
   levelLayer:
     serializedVersion: 2
     m_Bits: 8
-  currentMeleeWeapon: {fileID: 0}
-  currentRangedWeapon: {fileID: 0}
+  uiHandler: {fileID: 1375706292891146570}
   rangedWeaponContainer: {fileID: 4857574949029544374}
   meleeWeaponContainer: {fileID: 4857574949029544374}
-  loader: {fileID: 0}
+--- !u!114 &1375706292891146570
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2756689978146728882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c2c543b7a054ea19a8b05801653b4e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   healthContainers:
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -185,9 +198,7 @@ MonoBehaviour:
   - {fileID: 0}
   ammoContainer: {fileID: 0}
   pocketAmmoContainer: {fileID: 0}
-  magazineToSpawn: {fileID: 9206005927770374208, guid: 6092b69ad742a4443b45958c68d9518d, type: 3}
   weaponImage: {fileID: 0}
-  cameraToEnable: {fileID: 0}
 --- !u!114 &134537149820769812
 MonoBehaviour:
   m_ObjectHideFlags: 0

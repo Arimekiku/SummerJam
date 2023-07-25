@@ -12,13 +12,24 @@ public class PlayerData : ScriptableObject
     [SerializeField] private int maxHealth;
     [SerializeField] private float hitInvulnerableTime;
 
+    public Vector2 CursorPosition => Camera.main.ScreenToWorldPoint(Input.mousePosition);
     public float MoveSpeed => moveSpeed;
     public float DashSpeed => dashSpeed;
     public float DashDuration => dashDuration;
     public float DashCooldown => dashCooldown;
     public float HitInvulnerableTime => hitInvulnerableTime;
     public int MaxHealth => maxHealth;
+    
+    public static Vector2 GetInputVector()
+    {
+        Vector2 inputVector = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
 
+        if (inputVector.magnitude > 1) 
+            inputVector = inputVector.normalized;
+
+        return inputVector;
+    }
+    
     public void IncreaseMaxHealth(int amount)
     {
         if (amount < 0)

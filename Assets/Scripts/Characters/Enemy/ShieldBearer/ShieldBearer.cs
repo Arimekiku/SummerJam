@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class ShieldBearer : Enemy
 {
-    [SerializeField] private BotShield weapon;
+    [Space, SerializeField] private BotShield weapon;
     
     private new ShieldBearerData data;
     
