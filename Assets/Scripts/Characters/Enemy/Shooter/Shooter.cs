@@ -13,13 +13,15 @@ public class Shooter : Enemy
     private void Awake()
     {
         data = base.data as ShooterData;
+        
+        weapon.InitializedWeapon();
     }
 
     private void FixedUpdate()
     {
-        if (CheckPlayer(out Player player) && stunTimer <= 0)
+        if (target && stunTimer <= 0)
         {
-            Vector2 playerPosition = player.transform.position;
+            Vector2 playerPosition = target.transform.position;
             RotateTowardsPlayer(playerPosition);
             weapon.Attack(playerPosition);
         }
@@ -30,9 +32,12 @@ public class Shooter : Enemy
     
     public override void Activate()
     {
-        weapon.InitializedWeapon();
-        
         bulletDetector.BulletDetectEvent += EvasionBullet;
+    }
+
+    public override void Deactivate()
+    { 
+        bulletDetector.BulletDetectEvent -= EvasionBullet;
     }
 
     public override void TakeDamage(int damage, Vector2 damageDirection)
@@ -96,8 +101,8 @@ public class Shooter : Enemy
 
     protected override void Death()
     {
-        base.Death();
         weapon.DestroyWeapon();
-        Deactivate();
+        
+        base.Death();
     }
 }

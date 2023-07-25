@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 
+
 public abstract class Character : MonoBehaviour
 {
     [SerializeField] protected int currentHealth;
@@ -22,6 +23,7 @@ public abstract class Character : MonoBehaviour
     protected virtual void Death()
     {
         OnDeath?.Invoke();
+        Destroy(gameObject);
     }
 
     public virtual void Activate()

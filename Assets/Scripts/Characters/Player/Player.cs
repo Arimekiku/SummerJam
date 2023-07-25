@@ -6,6 +6,7 @@ using Cinemachine;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 [RequireComponent(typeof(Rigidbody2D))]
 public class Player : Character
 {

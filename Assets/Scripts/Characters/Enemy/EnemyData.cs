@@ -13,7 +13,6 @@ public abstract class EnemyData : ScriptableObject
     public float DetectionRange => detectionRange;
     public float DamageBoostSpeed => damageBoostSpeed;
     public int MaxHealth => maxHealth;
-    public Corpse CorpsePrefab => corpsePrefab;
 
     public void HandleDeath(Transform enemy)
     {
@@ -36,7 +35,7 @@ public abstract class EnemyData : ScriptableObject
 
     private void InstantiateDeathCorpse(Transform enemy)
     {
-        Corpse corpseToSpawn = Instantiate(CorpsePrefab, enemy.position, enemy.rotation);
+        Corpse corpseToSpawn = Instantiate(corpsePrefab, enemy.position, enemy.rotation);
         Vector2 randomVector = new Vector2(Random.value, Random.value);
         corpseToSpawn.Initialize(randomVector);
     }

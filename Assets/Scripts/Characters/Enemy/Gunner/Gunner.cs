@@ -10,13 +10,15 @@ public class Gunner : Enemy
     private void Awake()
     {
         data = base.data as GunnerData;
+        
+        weapon.InitializedWeapon();
     }
 
     private void FixedUpdate()
     {
-        if (CheckPlayer(out Player player) && stunTimer <= 0)
+        if (target && stunTimer <= 0)
         {
-            Vector2 playerPosition = player.transform.position;
+            Vector2 playerPosition = target.transform.position;
             RotateTowardsPlayer(playerPosition);
             weapon.Attack(playerPosition);
         }
@@ -49,7 +51,8 @@ public class Gunner : Enemy
 
     protected override void Death()
     {
+        weapon.DestroyWeapon();
+        
         base.Death();
-        Deactivate();
     }
 }

@@ -5,6 +5,7 @@ using UnityEngine;
 public class MachineGun : BotRangeWeapon
 {
     private bool onAttackDelay;
+    
     public override void Attack(Vector2 targetPointPosition)
     {
         if (onAttackDelay) 

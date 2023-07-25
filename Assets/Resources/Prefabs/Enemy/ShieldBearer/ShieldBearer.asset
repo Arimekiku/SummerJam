@@ -12,7 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75d39603d7494c218cb13521bb75f3f4, type: 3}
   m_Name: ShieldBearer
   m_EditorClassIdentifier: 
-  detectionRange: 0
-  damageBoostSpeed: 0
-  corpsePrefab: {fileID: 0}
-  rotationSpeed: 0
+  detectionRange: 6
+  damageBoostSpeed: 1
+  maxHealth: 0
+  corpsePrefab: {fileID: 7504129612594452067, guid: ae28bba4caa2604449d6b54d59819398, type: 3}
+  deathClip: {fileID: 8300000, guid: e0b7057921e368f428bf80c8e2d2cd2d, type: 3}
+  deathVFX: {fileID: 5777921196442322182, guid: d6ac1013a55c1fd4f8eb8ace636bd57a, type: 3}
+  rotationSpeed: 1

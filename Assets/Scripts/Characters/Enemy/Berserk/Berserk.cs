@@ -30,13 +30,13 @@ public class Berserk : Enemy
 
     private void FixedUpdate()
     {
-        if (CheckPlayer(out Player player) && stunTimer <= 0)
+        if (target && stunTimer <= 0)
         {
             if (!onTheJump)
-                RotateTowardsPlayer(player.transform.position);
+                RotateTowardsPlayer(target.transform.position);
 
             if (isReady)
-                StartCoroutine(PreparationForAttack(player));
+                StartCoroutine(PreparationForAttack(target));
         }
 
         if (stunTimer > 0)
@@ -130,17 +130,5 @@ public class Berserk : Enemy
         }
 
         isReady = true;
-    }
-
-    public override void TakeDamage(int damage, Vector2 damageDirection)
-    {
-        base.TakeDamage(damage, damageDirection);
-        
-    }
-
-    protected override void Death()
-    {
-        base.Death();
-        Deactivate();
     }
 }

@@ -1,6 +1,7 @@
 using Cinemachine;
 using UnityEngine;
 
+
 public class Enemy : Character
 {
     [SerializeField] private CinemachineImpulseSource shake;
@@ -8,12 +9,12 @@ public class Enemy : Character
     [SerializeField] protected EnemyData data;
 
     protected float stunTimer;
-    
+    protected Player target;
+
     protected virtual void Start()
     {
         currentHealth = data.MaxHealth;
         
-        Activate();
         shake = GetComponent<CinemachineImpulseSource>();
     }
 
@@ -22,42 +23,22 @@ public class Enemy : Character
         if (other.TryGetComponent(out Player player))
         {
             Vector2 directionDamageBoost = player.transform.position - transform.position;
-            player.TakeDamage(1, directionDamageBoost);
+            target.TakeDamage(1, directionDamageBoost);
         }
     }
-
-    protected bool CheckPlayer(out Player player)
+    
+    public override void Activate()
     {
-        player = null;
-        
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, data.DetectionRange);
+        base.Activate();
 
-        foreach (Collider2D collide in colliders)
-        {
-            if (collide.isTrigger)
-                continue;
-            
-            if (collide.TryGetComponent(out player))
-                break;
-        }
+        target = FindObjectOfType<Player>();
+    }
 
-        if (!player)
-            return false;
+    public override void Deactivate()
+    {
+        base.Deactivate();
         
-        Vector2 directionPlayer = player.transform.position - transform.position;
-        
-        RaycastHit2D[] hitsInfo = Physics2D.RaycastAll(transform.position, directionPlayer, data.DetectionRange);
-
-        foreach (RaycastHit2D hitInfo in hitsInfo)
-        {
-            if (hitInfo.collider.isTrigger) 
-                continue;
-
-            return hitInfo.collider.TryGetComponent(out player);
-        }
-        
-        player = null;
-        return false;
+        target = null;
     }
 
     protected virtual void RotateTowardsPlayer(Vector2 playerPosition)
@@ -66,11 +47,6 @@ public class Enemy : Character
         Vector2 directionRotate = playerPosition - castPosition;
         float angle = Mathf.Atan2(directionRotate.y, directionRotate.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0, 0, angle - 90f);
-    }
-
-    public override void Deactivate()
-    {
-        Destroy(gameObject);
     }
 
     public void Stun()

@@ -4,15 +4,17 @@ using UnityEngine;
 public class Spawner : MonoBehaviour
 {
     [SerializeField] private List<Enemy> enemies;
+    
+    public Enemy Spawned { get; private set; }
 
-    private void Start()
+    private void Awake()
     {
         SpawnEnemy();
     }
 
-    public void SpawnEnemy()
+    private void SpawnEnemy()
     {
         int rand = Random.Range(0, enemies.Count);
-        Instantiate(enemies[rand], transform);
+        Spawned = Instantiate(enemies[rand], transform);
     }
 }
