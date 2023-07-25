@@ -9,20 +9,19 @@ public class BotShield : BotRangeWeapon
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.TryGetComponent(out PlayerBullet bullet))
+        if (!other.TryGetComponent(out PlayerBullet bullet)) 
+            return;
+        RaycastHit2D[] hitsInfo = Physics2D.RaycastAll(bullet.transform.position, bullet.FlightDirection);
+        bullet.gameObject.SetActive(false);
+        foreach (RaycastHit2D raycastHit2D in hitsInfo)
         {
-            RaycastHit2D[] hitsInfo = Physics2D.RaycastAll(bullet.transform.position, bullet.FlightDirection);
-            bullet.gameObject.SetActive(false);
-            foreach (RaycastHit2D raycastHit2D in hitsInfo)
-            {
-                if (!raycastHit2D.collider.GetComponent<BotShield>())
-                    continue;
-                Vector2 normalVector = raycastHit2D.normal;
-                Vector2 newDirection = Vector2.Reflect(bullet.FlightDirection, normalVector);
-                poolObject.GetFreeElement(out BotBullet ammunition);
-                ammunition.SetDirectionAndStart(newDirection, raycastHit2D.point);
-                return;
-            }
+            if (!raycastHit2D.collider.GetComponent<BotShield>())
+                continue;
+            Vector2 normalVector = raycastHit2D.normal;
+            Vector2 newDirection = Vector2.Reflect(bullet.FlightDirection, normalVector);
+            poolObject.GetFreeElement(out BotBullet ammunition);
+            ammunition.SetDirectionAndStart(newDirection, raycastHit2D.point);
+            return;
         }
     }
 
