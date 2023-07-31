@@ -24,8 +24,8 @@ public class PlayerUI : MonoBehaviour
     {
         int i = 0;
         
-        foreach (Image healthContainer in healthContainers)
-            healthContainer.enabled = ++i < amount;
+        //foreach (Image healthContainer in healthContainers)
+            //healthContainer.enabled = ++i < amount;
     }
 
     public void ClearWeapon()

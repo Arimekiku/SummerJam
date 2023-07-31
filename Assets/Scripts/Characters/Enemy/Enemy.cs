@@ -1,7 +1,6 @@
 using Cinemachine;
 using UnityEngine;
 
-
 public class Enemy : Character
 {
     [SerializeField] private CinemachineImpulseSource shake;
@@ -29,15 +28,11 @@ public class Enemy : Character
     
     public override void Activate()
     {
-        base.Activate();
-
         target = FindObjectOfType<Player>();
     }
 
     public override void Deactivate()
     {
-        base.Deactivate();
-        
         target = null;
     }
 

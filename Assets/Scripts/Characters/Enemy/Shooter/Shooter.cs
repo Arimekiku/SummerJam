@@ -1,10 +1,9 @@
 using System.Collections;
 using UnityEngine;
 
-
 public class Shooter : Enemy
 {
-    [Space, SerializeField] private BotWeapon weapon;
+    [Space, SerializeField] private Weapon weapon;
     [SerializeField] private BulletDetector bulletDetector;
 
     private new ShooterData data;
@@ -15,7 +14,7 @@ public class Shooter : Enemy
     {
         data = base.data as ShooterData;
         
-        weapon.InitializedWeapon();
+        weapon.Initialize();
     }
 
     private void FixedUpdate()
@@ -98,12 +97,5 @@ public class Shooter : Enemy
 
             evasionOnCoolDown = false;
         }
-    }
-
-    protected override void Death()
-    {
-        weapon.DestroyWeapon();
-        
-        base.Death();
     }
 }

@@ -8,14 +8,22 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class Player : Character
 {
+    [Header("Movement")]
+    [SerializeField] private float moveSpeed;
+    [SerializeField] private float dashSpeed;
+    [SerializeField] private float dashDuration;
+    [SerializeField] private float dashCooldown;
+    
+    [Header("Health")]
+    [SerializeField] private int maxHealth;
+    [SerializeField] private float hitInvulnerableTime;
+
+    [Header("Weapon")]
     [SerializeField] private Transform rangedWeaponContainer;
     [SerializeField] private Transform meleeWeaponContainer;
 
-    public event Action OnWeaponPickup;
-    public event Action OnReloadRequired;
     public Vector2 CurrentCheckPointPosition { get; private set; }
-    
-    public SpriteRenderer Rend { get; private set; }
+
 
     private PlayerMeleeWeapon currentMeleeWeapon;
     private PlayerRangedWeapon currentRangedWeapon;
@@ -26,26 +34,19 @@ public class Player : Character
     public bool IsDashing { get; private set; }
     private bool invulnerable;
     private bool canAct;
-    private bool canDash;
 
     private PlayerUI uiHandler;
-    private PlayerData data;
     private Rigidbody2D body;
     
+    private static Vector2 CursorPosition => Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
     private void Awake()
     {
         body = GetComponent<Rigidbody2D>();
-        Rend = GetComponent<SpriteRenderer>();
         shake = GetComponent<CinemachineImpulseSource>();
         uiHandler = GetComponent<PlayerUI>();
-
-        data = Resources.Load("Prefabs/Player/Data", typeof(PlayerData)) as PlayerData;
-    }
-
-    private void Start()
-    {
-        currentHealth = data.MaxHealth;
-        uiHandler.UpdateHealth(currentHealth);
+        
+        currentHealth = maxHealth;
     }
 
     private void Update()
@@ -55,16 +56,16 @@ public class Player : Character
         
         RotateTowardsMouse();
 
-        if (Input.GetKeyDown(KeyCode.LeftShift) && canDash)
+        if (Input.GetKeyDown(KeyCode.LeftShift))
             Dash();
 
         if (Input.GetKeyDown(KeyCode.Mouse1)) 
             if (currentMeleeWeapon)
-                currentMeleeWeapon.Attack(data.CursorPosition);
+                currentMeleeWeapon.Attack(CursorPosition);
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
             if (currentRangedWeapon)
-                currentRangedWeapon.Attack(data.CursorPosition);
+                currentRangedWeapon.Attack(CursorPosition);
 
         if (Input.GetKeyDown(KeyCode.Q))
         {
@@ -72,7 +73,7 @@ public class Player : Character
             {
                 if (currentRangedWeapon is not Bow)
                 {
-                    currentRangedWeapon.ThrowWeapon(data.CursorPosition);
+                    currentRangedWeapon.ThrowWeapon(CursorPosition);
                     uiHandler.ClearWeapon();
                     currentRangedWeapon = null;
                 }
@@ -80,16 +81,16 @@ public class Player : Character
 
             if (currentMeleeWeapon)
             {
-                currentMeleeWeapon.ThrowWeapon(data.CursorPosition);
+                currentMeleeWeapon.ThrowWeapon(CursorPosition);
                 currentRangedWeapon = null;
             }
         }
         
         if (Input.GetKeyDown(KeyCode.E))
         {
-            IPickupable item = DetectPickup();
+            //IPickupable item = DetectPickup();
             
-            PickUpItem(item);
+            //PickUpItem(item);
         }
 
         if (Input.GetKeyDown(KeyCode.R))
@@ -102,24 +103,42 @@ public class Player : Character
         if (!IsDashing && canAct)
             Move();
     }
+    
+    private static Vector2 GetInputVector()
+    {
+        Vector2 inputVector = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+
+        if (inputVector.magnitude > 1) 
+            inputVector = inputVector.normalized;
+
+        return inputVector;
+    }
+
+    private void IncreaseMaxHealth(int amount)
+    {
+        if (amount < 0)
+            throw new Exception("Invalid HP amount");
+
+        maxHealth += amount;
+    }
 
     private void RotateTowardsMouse()
     {
-        Vector2 lookDirection = data.CursorPosition - body.position;
+        Vector2 lookDirection = CursorPosition - body.position;
         float angle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0f, 0f, angle - 90f);
     }
 
     private void Move()
     {
-        Vector2 moveVector = PlayerData.GetInputVector();
-        Vector2 newPosition = body.position + data.MoveSpeed * Time.fixedDeltaTime * moveVector;
+        Vector2 moveVector = GetInputVector();
+        Vector2 newPosition = body.position + moveSpeed * Time.fixedDeltaTime * moveVector;
         body.MovePosition(newPosition);
     }
 
     private void Dash()
     {
-        if (!canDash)
+        if (IsDashing)
             return;
         
         Vector2 directionDash = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
@@ -128,28 +147,25 @@ public class Player : Character
             directionDash = transform.up;
 
         IsDashing = true;
-        canDash = false;
-        
+
         StartCoroutine(CoolDownDash());
         StartCoroutine(DashMoving(directionDash));
         
         IEnumerator CoolDownDash()
         {
-            float time = data.DashCooldown;
+            float time = dashCooldown;
 
             while (time > 0)
             {
                 time -= Time.fixedDeltaTime;
                 yield return new WaitForSeconds(Time.fixedDeltaTime);
             }
-
-            canDash = true;
         }
         
         IEnumerator DashMoving(Vector2 dirDash)
         {
-            float time = data.DashDuration;
-            float speed = data.DashSpeed;
+            float time = dashDuration;
+            float speed = dashSpeed;
             
             while (time > 0.1)
             {
@@ -163,7 +179,7 @@ public class Player : Character
                     if (Math.Abs(Vector2.Dot(dirDash, hitInfo.normal)) >= 0.98f)
                         break;
 
-                    newDirection = SlideCollision(dirDash, hitInfo) * (speed * time / data.DashDuration);
+                    newDirection = SlideCollision(dirDash, hitInfo) * (speed * time / dashDuration);
                 }
 
                 if (newDirection != Vector2.zero)
@@ -181,7 +197,7 @@ public class Player : Character
         }
     }
 
-    private IPickupable DetectPickup()
+    private IInteractable DetectPickup()
     {
         Collider2D[] hitsInfo = Physics2D.OverlapCircleAll(transform.position, 1.5f);
 
@@ -190,31 +206,17 @@ public class Player : Character
 
         foreach (Collider2D hitInfo in hitsInfo)
         {
-            if (hitInfo.TryGetComponent(out IPickupable pickup))
-            {
-                if (pickup.Pickupable)
-                {
-                    pickup.PickUp(this);
-                    return pickup;
-                }
-
-                if (hitInfo.TryGetComponent(out Weapon weapon))
-                    weapon.transform.parent = rangedWeaponContainer;
-            }
-
-            if (hitInfo.TryGetComponent(out IInteractable interactable))
-            {
-                if (interactable.Type == InteractType.Button)
-                    interactable.Interact();
-                
-                return null;
-            }
+            if (!hitInfo.TryGetComponent(out IInteractable interactable)) 
+                continue;
+            
+            interactable.Interact();
+            return null;
         }
 
         return null;
     }
 
-    private void PickUpItem<T>(T item) where T : IPickupable
+    private void PickUpItem<T>(T item) where T : IInteractable
     {
         Vector2 playerPosition = transform.position;
         
@@ -230,8 +232,6 @@ public class Player : Character
             }
             case PlayerRangedWeapon weapon:
             {
-                OnWeaponPickup?.Invoke();
-                
                 if (currentRangedWeapon)
                 {
                     currentRangedWeapon.CastOut(playerPosition);
@@ -282,7 +282,7 @@ public class Player : Character
         IEnumerator TimerInvulnerable()
         {
             Time.timeScale = 0.4f;
-            float time = data.HitInvulnerableTime + 0.1f * (damage - 1);
+            float time = hitInvulnerableTime + 0.1f * (damage - 1);
 
             invulnerable = true;
         
@@ -300,7 +300,7 @@ public class Player : Character
         {
             damageDirection = damageDirection.normalized;
             
-            float time = (data.HitInvulnerableTime + 0.1f * (damage - 1));
+            float time = hitInvulnerableTime + 0.1f * (damage - 1);
             float distance = damage;
 
             float speed = distance / time;
@@ -335,29 +335,19 @@ public class Player : Character
     protected override void Death()
     {
         base.Death();
-        RequireReload();
-        RestoreHealth(data.MaxHealth);
+        RestoreHealth(maxHealth);
     }
 
     public override void Activate()
     {
-        base.Activate();
-        
-        uiHandler.UpdateHealth(currentHealth);
+        //uiHandler.UpdateHealth(currentHealth);
 
         canAct = true;
     }
 
     public override void Deactivate()
     {
-        base.Deactivate();
-        
         canAct = false;
-    }
-
-    public void RequireReload()
-    {
-        OnReloadRequired?.Invoke();
     }
 
     public void NewCheckPoint(Transform newPoint)
@@ -367,7 +357,7 @@ public class Player : Character
 
     public void RestoreHealth(int amount)
     {
-        currentHealth = Mathf.Min(currentHealth + amount, data.MaxHealth);
+        currentHealth = Mathf.Min(currentHealth + amount, maxHealth);
         
         uiHandler.UpdateHealth(currentHealth);
     }
@@ -384,14 +374,9 @@ public class Player : Character
         uiHandler.RestoreAmmo();
     }
 
-    public void AllowDash()
-    {
-        canDash = true;
-    }
-
     public void IncreaseMaxHp(int amount)
     {
-        data.IncreaseMaxHealth(amount);
+        IncreaseMaxHealth(amount);
         
         RestoreHealth(amount);
         uiHandler.UpdateHealth(currentHealth);

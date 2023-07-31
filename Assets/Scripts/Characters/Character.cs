@@ -4,13 +4,9 @@ using UnityEngine;
 
 public abstract class Character : MonoBehaviour
 {
-    [SerializeField] protected int currentHealth;
-    
     public event Action OnDeath;
-    public event Action OnActivate;
-    public event Action OnDeactivate;
     
-    public int Health => currentHealth;
+    protected int currentHealth;
 
     public virtual void TakeDamage(int damage, Vector2 damageDirection)
     {
@@ -26,13 +22,7 @@ public abstract class Character : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public virtual void Activate()
-    {
-        OnActivate?.Invoke();
-    }
+    public abstract void Activate();
 
-    public virtual void Deactivate()
-    {
-        OnDeactivate?.Invoke();
-    }
+    public abstract void Deactivate();
 }

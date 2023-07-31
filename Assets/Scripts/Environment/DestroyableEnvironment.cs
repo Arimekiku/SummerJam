@@ -1,7 +1,7 @@
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class DestroyableEnvironment : MonoBehaviour, IInteractable, IDestroyed
+public class DestroyableEnvironment : MonoBehaviour, IInteractable, IDestroyable
 {
     [SerializeField] private Sprite[] possibleSprites;
     [SerializeField] private Sprite[] paintedSprites;
@@ -11,8 +11,6 @@ public class DestroyableEnvironment : MonoBehaviour, IInteractable, IDestroyed
     [SerializeField] private ParticleSystem particles;
     [SerializeField] private AudioClip[] impactSounds;
     
-    public InteractType Type { get; } = InteractType.Trigger;
-
     private int maxPieces = 5;
     private int minPieces = 2;
     private bool isLootable;
@@ -53,8 +51,7 @@ public class DestroyableEnvironment : MonoBehaviour, IInteractable, IDestroyed
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (Type == InteractType.Trigger)
-            Interact();
+        Interact();
     }
 
     public void Interact()

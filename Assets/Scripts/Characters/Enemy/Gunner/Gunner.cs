@@ -11,7 +11,7 @@ public class Gunner : Enemy
     {
         data = base.data as GunnerData;
         
-        weapon.InitializedWeapon();
+        weapon.Initialize();
     }
 
     private void FixedUpdate()
@@ -47,12 +47,5 @@ public class Gunner : Enemy
                 yield return new WaitForSeconds(Time.fixedDeltaTime);
             }
         }
-    }
-
-    protected override void Death()
-    {
-        weapon.DestroyWeapon();
-        
-        base.Death();
     }
 }

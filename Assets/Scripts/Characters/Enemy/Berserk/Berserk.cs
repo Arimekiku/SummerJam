@@ -26,7 +26,7 @@ public class Berserk : Enemy
         base.Start();
         
         foreach (BerserkAxe berserkAxe in axes)
-            berserkAxe.InitializedWeapon();
+            berserkAxe.Initialize();
     }
 
     private void FixedUpdate()
