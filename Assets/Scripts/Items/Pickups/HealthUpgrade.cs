@@ -1,21 +1,14 @@
 using UnityEngine;
 
-public class HealthUpgrade : MonoBehaviour, IInteractable
+public class HealthUpgrade : ItemBehaviour
 {
     [SerializeField] private int amount;
     [SerializeField] private Dialogue dialogue;
 
-    private Player player;
-
-    private void Awake()
+    public override void Initialize(Player player)
     {
-        player = FindObjectOfType<Player>();
-    }
-
-    public void Interact()
-    {
-        player.IncreaseMaxHp(amount);
-        dialogue.Interact();
-        Destroy(gameObject);
+        //player.IncreaseMaxHp(amount);
+        //dialogue.Interact();
+        print("Max hp increased");
     }
 }

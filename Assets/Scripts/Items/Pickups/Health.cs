@@ -1,15 +1,11 @@
 using UnityEngine;
 
-public class Health : MonoBehaviour
+public class Health : ItemBehaviour
 {
     [SerializeField] private int healthToRestore;
 
-    private void OnTriggerEnter2D(Collider2D other)
+    public override void Initialize(Player player)
     {
-        if (other.TryGetComponent(out Player player))
-        {
-            player.RestoreHealth(healthToRestore);
-            Destroy(gameObject);
-        }
+        print("Grabbed health");
     }
 }

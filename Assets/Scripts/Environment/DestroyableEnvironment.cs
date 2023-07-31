@@ -1,7 +1,7 @@
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class DestroyableEnvironment : MonoBehaviour, IInteractable, IDestroyable
+public class DestroyableEnvironment : MonoBehaviour, IDestroyable
 {
     [SerializeField] private Sprite[] possibleSprites;
     [SerializeField] private Sprite[] paintedSprites;
@@ -50,11 +50,6 @@ public class DestroyableEnvironment : MonoBehaviour, IInteractable, IDestroyable
     }
 
     private void OnTriggerEnter2D(Collider2D other)
-    {
-        Interact();
-    }
-
-    public void Interact()
     {
         DestroyThisObject();
     }

@@ -8,13 +8,14 @@ public class Dialogue : MonoBehaviour, IInteractable, IDestroyable
     [Space, SerializeField] private DialoguePhrase[] phrases;
     [Space, SerializeField] private DialogueActor[] actors;
 
-    public void Interact()
-    {
-        dialogueBox.StartDialogue(phrases, actors, onDialogueEnd);
-    }
-
     public void DestroyThisObject()
     {
         Destroy(this);
+    }
+
+    public void Interact()
+    {
+        dialogueBox.StartDialogue(phrases, actors, onDialogueEnd);
+
     }
 }

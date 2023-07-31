@@ -1,17 +1,14 @@
 using UnityEngine;
 
-public class Ammo : MonoBehaviour
+public class Ammo : ItemBehaviour
 {
     [SerializeField] private PlayerWeapon refillType;
     
     private const int CountAmmo = 12;
 
-    private void OnTriggerEnter2D(Collider2D other)
+    public override void Initialize(Player player)
     {
-        if (other.TryGetComponent(out Player player))
-        {
-            player.RestoreAmmo(CountAmmo, refillType);
-            Destroy(gameObject);
-        }
+        //player.RestoreAmmo(CountAmmo, refillType);
+        print("Grabbed Ammo");
     }
 }

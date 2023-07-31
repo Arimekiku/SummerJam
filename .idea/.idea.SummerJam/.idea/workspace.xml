@@ -4,7 +4,231 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3a5d7fcb-720d-4924-af84-697c7a19f996" name="Changes" comment="" />
+    <list default="true" id="3a5d7fcb-720d-4924-af84-697c7a19f996" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemies.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemies/Corpse.prefab" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemies/Corpse.prefab.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemies/Entities.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemies/Entities/Berserk.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemies/Entities/Berserk/Berserk.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemies/Entities/Berserk/Berserk.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemies/Entities/Berserk/Berserker.prefab" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemies/Entities/Berserk/Berserker.prefab.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemies/Entities/Gunner.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemies/Entities/Gunner/Gunner.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemies/Entities/Gunner/Gunner.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemies/Entities/Gunner/Gunner.prefab" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemies/Entities/Gunner/Gunner.prefab.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemies/Entities/ShieldBearer.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemies/Entities/ShieldBearer/ShieldBearer.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemies/Entities/ShieldBearer/ShieldBearer.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemies/Entities/ShieldBearer/ShieldBearer.prefab" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemies/Entities/ShieldBearer/ShieldBearer.prefab.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemies/Entities/Shooter.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemies/Entities/Shooter/Shooter.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemies/Entities/Shooter/Shooter.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemies/Entities/Shooter/Shooter.prefab" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemies/Entities/Shooter/Shooter.prefab.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemies/Weapons.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemies/Weapons/EnemyBullet.prefab" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemies/Weapons/EnemyBullet.prefab.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemies/Weapons/MachineGun.prefab" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemies/Weapons/MachineGun.prefab.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemies/Weapons/Pistol.prefab" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemies/Weapons/Pistol.prefab.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemies/Weapons/Shield.prefab" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemies/Weapons/Shield.prefab.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Interactables/Chest.prefab" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Interactables/Chest.prefab.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Interactables/Items.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Interactables/Items/Item.prefab" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Interactables/Items/Item.prefab.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Interactables/Items/Pickups.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Interactables/Items/Pickups/Ammo.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Interactables/Items/Pickups/Ammo/Ammo.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Interactables/Items/Pickups/Ammo/Ammo.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Interactables/Items/Pickups/Ammo/Ammo.prefab" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Interactables/Items/Pickups/Ammo/Ammo.prefab.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Interactables/Items/Pickups/Health.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Interactables/Items/Pickups/Health/Health.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Interactables/Items/Pickups/Health/Health.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Interactables/Items/Pickups/Health/Health.prefab" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Interactables/Items/Pickups/Health/Health.prefab.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Interactables/Items/Weapons.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Interactables/Items/Weapons/AmmoUI.prefab" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Interactables/Items/Weapons/AmmoUI.prefab.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Interactables/Items/Weapons/Bow.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Interactables/Items/Weapons/Bow/Arrow.prefab" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Interactables/Items/Weapons/Bow/Arrow.prefab.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Interactables/Items/Weapons/Bow/Bow.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Interactables/Items/Weapons/Bow/Bow.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Interactables/Items/Weapons/Bow/Bow.prefab" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Interactables/Items/Weapons/Bow/Bow.prefab.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Interactables/Items/Weapons/BulletUI.prefab" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Interactables/Items/Weapons/BulletUI.prefab.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Interactables/Items/Weapons/Pistol.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Interactables/Items/Weapons/Pistol/Bullet.prefab" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Interactables/Items/Weapons/Pistol/Bullet.prefab.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Interactables/Items/Weapons/Pistol/Pistol.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Interactables/Items/Weapons/Pistol/Pistol.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Interactables/Items/Weapons/Pistol/Pistol.prefab" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Interactables/Items/Weapons/Pistol/Pistol.prefab.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Interactables/Items/Weapons/Shield.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Interactables/Items/Weapons/Shield/Bullet.prefab" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Interactables/Items/Weapons/Shield/Bullet.prefab.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Interactables/Items/Weapons/Shield/Shield.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Interactables/Items/Weapons/Shield/Shield.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Interactables/Items/Weapons/Shield/Shield.prefab" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/Interactables/Items/Weapons/Shield/Shield.prefab.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Environment/Chest.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Environment/Chest.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Items/ItemBehaviour.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Items/ItemBehaviour.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Items/ItemData.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Items/ItemData.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/EnemyWeapons/EnemyWeapon.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/EnemyWeapons/EnemyWeapon.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/PlayerWeapons/Melee/PlayerMeleeWeapon.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/PlayerWeapons/Melee/PlayerMeleeWeapon.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Loaders/GeneralLoader.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Loaders/GeneralLoader.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Loaders/ItemLoader.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Loaders/ItemLoader.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.SummerJam/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SummerJam/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemy.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemy/Berserk.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemy/Berserk/Berserk.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemy/Berserk/Berserk.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemy/Berserk/Berserker.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemy/Berserk/Berserker.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemy/Corpse.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemy/Corpse.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemy/Gunner.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemy/Gunner/Gunner.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemy/Gunner/Gunner.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemy/Gunner/Gunner.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemy/Gunner/Gunner.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemy/ShieldBearer.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemy/ShieldBearer/ShieldBearer.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemy/ShieldBearer/ShieldBearer.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemy/ShieldBearer/ShieldBearer.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemy/ShieldBearer/ShieldBearer.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemy/Shooter.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemy/Shooter/Shooter.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemy/Shooter/Shooter.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemy/Shooter/Shooter.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Enemy/Shooter/Shooter.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Environment.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Environment/ArrowTrap.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Environment/ArrowTrap/Arrow.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Environment/ArrowTrap/Arrow.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Environment/ArrowTrap/ArrowTrap.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Environment/ArrowTrap/ArrowTrap.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Environment/PickUps.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Environment/PickUps/Ammo.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Environment/PickUps/Ammo.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Environment/PickUps/Health.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Environment/PickUps/Health.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Interactables/ErasableWall.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Interactables/ErasableWall.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Interactables/Eraser.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Interactables/Eraser.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Player/Data.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Player/Data.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Weapon.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Weapon/BotWeapon.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Weapon/BotWeapon/EnemyBullet.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Weapon/BotWeapon/EnemyBullet.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Weapon/BotWeapon/MachineGun.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Weapon/BotWeapon/MachineGun.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Weapon/BotWeapon/Pistol.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Weapon/BotWeapon/Pistol.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Weapon/BotWeapon/Shield.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Weapon/BotWeapon/Shield.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Weapon/PlayerWeapon.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Weapon/PlayerWeapon/AmmoUI.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Weapon/PlayerWeapon/AmmoUI.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Weapon/PlayerWeapon/Bow.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Weapon/PlayerWeapon/Bow/Arrow.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Weapon/PlayerWeapon/Bow/Arrow.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Weapon/PlayerWeapon/Bow/Bow.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Weapon/PlayerWeapon/Bow/Bow.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Weapon/PlayerWeapon/BulletUI.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Weapon/PlayerWeapon/BulletUI.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Weapon/PlayerWeapon/Pistol.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Weapon/PlayerWeapon/Pistol/Bullet.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Weapon/PlayerWeapon/Pistol/Bullet.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Weapon/PlayerWeapon/Pistol/Pistol.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Weapon/PlayerWeapon/Pistol/Pistol.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Weapon/PlayerWeapon/Shield.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Weapon/PlayerWeapon/Shield/Bullet.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Weapon/PlayerWeapon/Shield/Bullet.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Weapon/PlayerWeapon/Shield/Shield.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Weapon/PlayerWeapon/Shield/Shield.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Test.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Test.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Characters/Enemy/ShieldBearer/ShieldBearer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Characters/Enemy/ShieldBearer/ShieldBearer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Characters/Enemy/Shooter/Shooter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Characters/Enemy/Shooter/Shooter.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Characters/Player/Player.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Characters/Player/Player.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Environment/DestroyableEnvironment.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Environment/DestroyableEnvironment.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Item.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Item.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Pickups/Ammo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Pickups/Ammo.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Pickups/Health.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Pickups/Health.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Pickups/HealthUpgrade.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Pickups/HealthUpgrade.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/Ammunition.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/Ammunition.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/Ammunition.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/Ammunition.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/AmmunitionUI.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/AmmunitionUI.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/AmmunitionUI.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/AmmunitionUI.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/BotWeapon.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/EnemyWeapons.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/BotWeapon/BerserkAxe.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/EnemyWeapons/BerserkAxe.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/BotWeapon/BerserkAxe.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/EnemyWeapons/BerserkAxe.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/BotWeapon/RangeWeapon.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/EnemyWeapons/RangeWeapon.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/BotWeapon/RangeWeapon/BotRangeWeapon.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/EnemyWeapons/RangeWeapon/EnemyRangeWeapon.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/BotWeapon/RangeWeapon/BotRangeWeapon.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/EnemyWeapons/RangeWeapon/EnemyRangeWeapon.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/BotWeapon/RangeWeapon/MachineGun.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/EnemyWeapons/RangeWeapon/MachineGun.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/BotWeapon/RangeWeapon/MachineGun/MachineGun.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/EnemyWeapons/RangeWeapon/MachineGun/MachineGun.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/BotWeapon/RangeWeapon/MachineGun/MachineGun.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/EnemyWeapons/RangeWeapon/MachineGun/MachineGun.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/BotWeapon/RangeWeapon/Pistol.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/EnemyWeapons/RangeWeapon/Pistol.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/BotWeapon/RangeWeapon/Pistol/BotBullet.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/EnemyWeapons/RangeWeapon/Pistol/BotBullet.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/BotWeapon/RangeWeapon/Pistol/BotBullet.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/EnemyWeapons/RangeWeapon/Pistol/BotBullet.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/BotWeapon/RangeWeapon/Pistol/BotPistol.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/EnemyWeapons/RangeWeapon/Pistol/EnemyPistol.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/BotWeapon/RangeWeapon/Pistol/BotPistol.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/EnemyWeapons/RangeWeapon/Pistol/EnemyPistol.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/BotWeapon/RangeWeapon/Shield.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/EnemyWeapons/RangeWeapon/Shield.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/BotWeapon/RangeWeapon/Shield/BotShield.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/EnemyWeapons/RangeWeapon/Shield/EnemyShield.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/BotWeapon/RangeWeapon/Shield/BotShield.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/EnemyWeapons/RangeWeapon/Shield/EnemyShield.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/PlayerWeapon.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/PlayerWeapons.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/PlayerWeapon/Melee.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/PlayerWeapons/Melee.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/PlayerWeapon/Melee/Axe.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/PlayerWeapons/Melee/Axe.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/PlayerWeapon/Melee/Axe/Axe.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/PlayerWeapons/Melee/Axe/Axe.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/PlayerWeapon/Melee/Axe/Axe.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/PlayerWeapons/Melee/Axe/Axe.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/PlayerWeapon/Melee/Bat.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/PlayerWeapons/Melee/Bat.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/PlayerWeapon/Melee/Bat/Bat.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/PlayerWeapons/Melee/Bat/Bat.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/PlayerWeapon/Melee/Bat/Bat.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/PlayerWeapons/Melee/Bat/Bat.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/PlayerWeapon/Melee/PlayerMeleeWeapon.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/PlayerWeapon/Melee/PlayerMeleeWeapon.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/PlayerWeapon/PlayerWeapon.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/PlayerWeapons/PlayerWeapon.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/PlayerWeapon/PlayerWeapon.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/PlayerWeapon/Range.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/PlayerWeapons/Range.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/PlayerWeapon/Range/Bow.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/PlayerWeapons/Range/Bow.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/PlayerWeapon/Range/Bow/Arrow.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/PlayerWeapons/Range/Bow/Arrow.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/PlayerWeapon/Range/Bow/Arrow.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/PlayerWeapons/Range/Bow/Arrow.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/PlayerWeapon/Range/Bow/Bow.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/PlayerWeapons/Range/Bow/Bow.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/PlayerWeapon/Range/Bow/Bow.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/PlayerWeapons/Range/Bow/Bow.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/PlayerWeapon/Range/Pistol.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/PlayerWeapons/Range/Pistol.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/PlayerWeapon/Range/Pistol/Pistol.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/PlayerWeapons/Range/Pistol/Pistol.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/PlayerWeapon/Range/Pistol/Pistol.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/PlayerWeapons/Range/Pistol/Pistol.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/PlayerWeapon/Range/Pistol/PlayerBullet.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/PlayerWeapons/Range/Pistol/PlayerBullet.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/PlayerWeapon/Range/Pistol/PlayerBullet.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/PlayerWeapons/Range/Pistol/PlayerBullet.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/PlayerWeapon/Range/PlayerRangedWeapon.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/PlayerWeapons/Range/PlayerRangedWeapon.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/PlayerWeapon/Range/PlayerRangedWeapon.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/PlayerWeapons/Range/PlayerRangedWeapon.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/PlayerWeapon/Range/Shield.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/PlayerWeapons/Range/Shield.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/PlayerWeapon/Range/Shield/PlayerShield.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/PlayerWeapons/Range/Shield/Shield.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/PlayerWeapon/Range/Shield/PlayerShield.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/PlayerWeapons/Range/Shield/Shield.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/Weapon.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Items/Weapon/Weapon.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Items/Weapons/PlayerWeapons/PlayerWeapon.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Loaders/CharacterLoader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Loaders/CharacterLoader.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Utils/Dialogue/Dialogue.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Utils/Dialogue/Dialogue.cs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -15,8 +239,8 @@
     <option name="RESET_MODE" value="HARD" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/0ae5d4e782f74095b2c8d38f4225786f16e200/02/192b7cc9/Transform.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/40e61801821d4de68d8cdfcea0fe1f4b17400/82/128a10fe/WeaponBehaviour.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Loaders/PlayerLoader.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectId" id="2T6PFubABRHtqemgUeijK3MBmRw" />
@@ -27,27 +251,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "settings.editor.selected.configurable": "preferences.environmentSetup",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;resealeBranch&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.environmentSetup&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "rider.external.source.directories": [
-      "C:\\Users\\DtdTravoed\\AppData\\Roaming\\JetBrains\\Rider2023.1\\resharper-host\\DecompilerCache",
-      "C:\\Users\\DtdTravoed\\AppData\\Roaming\\JetBrains\\Rider2023.1\\resharper-host\\SourcesCache",
-      "C:\\Users\\DtdTravoed\\AppData\\Local\\Symbols\\src"
+  &quot;keyToStringList&quot;: {
+    &quot;rider.external.source.directories&quot;: [
+      &quot;C:\\Users\\DtdTravoed\\AppData\\Roaming\\JetBrains\\Rider2023.1\\resharper-host\\DecompilerCache&quot;,
+      &quot;C:\\Users\\DtdTravoed\\AppData\\Roaming\\JetBrains\\Rider2023.1\\resharper-host\\SourcesCache&quot;,
+      &quot;C:\\Users\\DtdTravoed\\AppData\\Local\\Symbols\\src&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
     <configuration name="Start Unity" type="RunUnityExe" factoryName="Unity Executable">
       <option name="EXE_PATH" value="D:\Unity\Installs\2022.2.8f1\Editor\Unity.exe" />
@@ -98,7 +323,18 @@
       <workItem from="1690417158655" duration="3484000" />
       <workItem from="1690472786154" duration="2119000" />
       <workItem from="1690768010894" duration="2877000" />
+      <workItem from="1690772709829" duration="3332000" />
+      <workItem from="1690809816749" duration="8984000" />
     </task>
+    <task id="LOCAL-00001" summary="Code simplifying">
+      <option name="closed" value="true" />
+      <created>1690775311381</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1690775311381</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -121,5 +357,7 @@
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+    <MESSAGE value="Code simplifying" />
+    <option name="LAST_COMMIT_MESSAGE" value="Code simplifying" />
   </component>
 </project>

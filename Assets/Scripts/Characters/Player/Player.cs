@@ -23,15 +23,15 @@ public class Player : Character
     [SerializeField] private Transform meleeWeaponContainer;
 
     public Vector2 CurrentCheckPointPosition { get; private set; }
-
+    public Transform RangedContainer => rangedWeaponContainer;
 
     private PlayerMeleeWeapon currentMeleeWeapon;
-    private PlayerRangedWeapon currentRangedWeapon;
+    private PlayerRangedWeapon currentPlayerRangedWeapon;
 
     private readonly Dictionary<Type, int> ammoStack = new Dictionary<Type, int>();
     private CinemachineImpulseSource shake;
 
-    public bool IsDashing { get; private set; }
+    private bool isDashing;
     private bool invulnerable;
     private bool canAct;
 
@@ -64,43 +64,41 @@ public class Player : Character
                 currentMeleeWeapon.Attack(CursorPosition);
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
-            if (currentRangedWeapon)
-                currentRangedWeapon.Attack(CursorPosition);
+            if (currentPlayerRangedWeapon)
+                currentPlayerRangedWeapon.Attack(CursorPosition);
 
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            if (currentRangedWeapon)
+            if (currentPlayerRangedWeapon)
             {
-                if (currentRangedWeapon is not Bow)
+                if (currentPlayerRangedWeapon is not Bow)
                 {
-                    currentRangedWeapon.ThrowWeapon(CursorPosition);
+                    currentPlayerRangedWeapon.ThrowWeapon(CursorPosition);
                     uiHandler.ClearWeapon();
-                    currentRangedWeapon = null;
+                    currentPlayerRangedWeapon = null;
                 }
             }
 
             if (currentMeleeWeapon)
             {
                 currentMeleeWeapon.ThrowWeapon(CursorPosition);
-                currentRangedWeapon = null;
+                currentPlayerRangedWeapon = null;
             }
         }
         
         if (Input.GetKeyDown(KeyCode.E))
         {
-            //IPickupable item = DetectPickup();
-            
-            //PickUpItem(item);
+            Interact();
         }
 
         if (Input.GetKeyDown(KeyCode.R))
-            if(currentRangedWeapon)
-                Reload(currentRangedWeapon);
+            if(currentPlayerRangedWeapon)
+                Reload(currentPlayerRangedWeapon);
     }
 
     private void FixedUpdate()
     {
-        if (!IsDashing && canAct)
+        if (!isDashing && canAct)
             Move();
     }
     
@@ -138,7 +136,7 @@ public class Player : Character
 
     private void Dash()
     {
-        if (IsDashing)
+        if (isDashing)
             return;
         
         Vector2 directionDash = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
@@ -146,7 +144,7 @@ public class Player : Character
         if (directionDash == Vector2.zero)
             directionDash = transform.up;
 
-        IsDashing = true;
+        isDashing = true;
 
         StartCoroutine(CoolDownDash());
         StartCoroutine(DashMoving(directionDash));
@@ -191,18 +189,15 @@ public class Player : Character
                 yield return new WaitForSeconds(Time.fixedDeltaTime);
             }
 
-            IsDashing = false;
+            isDashing = false;
             
             Vector3 SlideCollision(Vector2 direction, RaycastHit2D hitInfo) => Vector3.ProjectOnPlane(direction, hitInfo.normal);
         }
     }
 
-    private IInteractable DetectPickup()
+    private void Interact()
     {
         Collider2D[] hitsInfo = Physics2D.OverlapCircleAll(transform.position, 1.5f);
-
-        if (hitsInfo.Length == 0)
-            return null;
 
         foreach (Collider2D hitInfo in hitsInfo)
         {
@@ -210,43 +205,10 @@ public class Player : Character
                 continue;
             
             interactable.Interact();
-            return null;
-        }
-
-        return null;
-    }
-
-    private void PickUpItem<T>(T item) where T : IInteractable
-    {
-        Vector2 playerPosition = transform.position;
-        
-        switch (item)
-        {
-            case PlayerMeleeWeapon weapon:
-            {
-                if (currentMeleeWeapon)
-                    currentMeleeWeapon.CastOut(playerPosition);
-
-                currentMeleeWeapon = weapon;
-                return;
-            }
-            case PlayerRangedWeapon weapon:
-            {
-                if (currentRangedWeapon)
-                {
-                    currentRangedWeapon.CastOut(playerPosition);
-
-                    uiHandler.ClearWeapon();
-                }
-                
-                currentRangedWeapon = weapon;
-                uiHandler.UpdateWeapon(currentRangedWeapon, ammoStack);
-
-                return;
-            }
+            return;
         }
     }
-    
+
     public override void TakeDamage(int damage, Vector2 damageDirection)
     {
         if (IgnoreDamage()) 
@@ -305,7 +267,7 @@ public class Player : Character
 
             float speed = distance / time;
 
-            IsDashing = true;
+            isDashing = true;
             
             while (time > 0)
             {
@@ -315,7 +277,7 @@ public class Player : Character
                 yield return new WaitForSeconds(Time.fixedDeltaTime);
             }
 
-            IsDashing = false;
+            isDashing = false;
         }
     }
 
@@ -330,7 +292,7 @@ public class Player : Character
         uiHandler.DepleteAmmo();
     }
     
-    public bool IgnoreDamage() => IsDashing || invulnerable;
+    public bool IgnoreDamage() => isDashing || invulnerable;
     
     protected override void Death()
     {

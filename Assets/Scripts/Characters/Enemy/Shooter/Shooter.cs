@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Shooter : Enemy
 {
-    [Space, SerializeField] private Weapon weapon;
+    [Space, SerializeField] private EnemyWeapon weapon;
     [SerializeField] private BulletDetector bulletDetector;
 
     private new ShooterData data;
