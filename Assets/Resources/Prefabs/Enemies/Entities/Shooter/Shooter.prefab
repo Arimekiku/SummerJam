@@ -71,8 +71,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 870553271
+  m_SortingLayer: 2
   m_SortingOrder: 5
   m_Sprite: {fileID: 21300000, guid: 5bdabb588c5acc84f9599e05ff6ce762, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -328,8 +328,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 870553271
+  m_SortingLayer: 2
   m_SortingOrder: 3
   m_Sprite: {fileID: 21300000, guid: 7f906bd8195f2bf4f999391823a22449, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -354,9 +354,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5507480b2f132654e8cce3a383dc1513, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentHealth: 2
-  deathClip: {fileID: 8300000, guid: e0b7057921e368f428bf80c8e2d2cd2d, type: 3}
-  deathEffect: {fileID: 5777921196442322182, guid: d6ac1013a55c1fd4f8eb8ace636bd57a, type: 3}
   shake: {fileID: -5032429405524407478}
   enemyAmmo: {fileID: 7618758957945853440, guid: bf1af1174cc124f48ab2f98fb51468c5, type: 3}
   data: {fileID: 11400000, guid: 4cda784a1902a0e45b9eea48859eca1a, type: 2}
@@ -370,10 +367,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3169346509056878567}
     m_Modifications:
-    - target: {fileID: 450543394043113223, guid: 8f32197f51be21548a17acf2abcd2de4, type: 3}
-      propertyPath: damage
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4740137204398469753, guid: 8f32197f51be21548a17acf2abcd2de4, type: 3}
       propertyPath: m_Name
       value: Pistol

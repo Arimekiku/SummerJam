@@ -34,7 +34,7 @@ Transform:
   m_Children:
   - {fileID: 318852735001676552}
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &-4596189252952696011
 MonoBehaviour:
@@ -101,9 +101,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a04b7db3bd747e46a4492cce591bd09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentHealth: 4
-  deathClip: {fileID: 8300000, guid: e0b7057921e368f428bf80c8e2d2cd2d, type: 3}
-  deathEffect: {fileID: 5777921196442322182, guid: d6ac1013a55c1fd4f8eb8ace636bd57a, type: 3}
   shake: {fileID: -4596189252952696011}
   enemyAmmo: {fileID: 7618758957945853440, guid: bf1af1174cc124f48ab2f98fb51468c5, type: 3}
   data: {fileID: 11400000, guid: 0591d482082f45c43a1203a23122f4d8, type: 2}
@@ -181,8 +178,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 870553271
+  m_SortingLayer: 2
   m_SortingOrder: 4
   m_Sprite: {fileID: 21300000, guid: 70ba02e4e3424b648958db2ad591f3e8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -266,8 +263,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 870553271
+  m_SortingLayer: 2
   m_SortingOrder: 5
   m_Sprite: {fileID: 21300000, guid: 960b5bee0816875499fa4bd250933bc8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -288,37 +285,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 318852735001676552}
     m_Modifications:
-    - target: {fileID: 1268271249265049496, guid: deeed438e50c39d469086f11afd1c5c7, type: 3}
-      propertyPath: ammoPrefab
-      value: 
-      objectReference: {fileID: 2299077028281836041, guid: a2ef5a9189742b0408c474f50a3a6379, type: 3}
-    - target: {fileID: 1268271249265049496, guid: deeed438e50c39d469086f11afd1c5c7, type: 3}
-      propertyPath: maxNumberOfAmmo
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1268271249265049496, guid: deeed438e50c39d469086f11afd1c5c7, type: 3}
-      propertyPath: rateOfAttackPerSec
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 3215717040992203017, guid: deeed438e50c39d469086f11afd1c5c7, type: 3}
-      propertyPath: m_FlipY
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3215717040992203017, guid: deeed438e50c39d469086f11afd1c5c7, type: 3}
-      propertyPath: m_SortingOrder
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 4678475994198258250, guid: deeed438e50c39d469086f11afd1c5c7, type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
     - target: {fileID: 5522436707169088195, guid: deeed438e50c39d469086f11afd1c5c7, type: 3}
       propertyPath: m_Name
       value: MachineGun
-      objectReference: {fileID: 0}
-    - target: {fileID: 5522436707169088195, guid: deeed438e50c39d469086f11afd1c5c7, type: 3}
-      propertyPath: m_Layer
-      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 5884326399157249015, guid: deeed438e50c39d469086f11afd1c5c7, type: 3}
       propertyPath: m_RootOrder

@@ -71,12 +71,9 @@ public class Player : Character
         {
             if (currentRangedWeapon)
             {
-                if (currentRangedWeapon is not Bow)
-                {
-                    currentRangedWeapon.ThrowWeapon(CursorPosition);
-                    uiHandler.ClearWeapon();
-                    currentRangedWeapon = null;
-                }
+                currentRangedWeapon.ThrowWeapon(CursorPosition);
+                uiHandler.ClearWeapon();
+                currentRangedWeapon = null;
             }
 
             if (currentMeleeWeapon)

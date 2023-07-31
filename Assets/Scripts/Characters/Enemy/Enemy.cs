@@ -1,5 +1,7 @@
+using System;
 using Cinemachine;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Enemy : Character
 {
@@ -10,11 +12,20 @@ public class Enemy : Character
     protected float stunTimer;
     protected Player target;
 
+    private Vector2 startPosition;
+
     protected virtual void Start()
     {
         currentHealth = data.MaxHealth;
+        startPosition = transform.position;
         
         shake = GetComponent<CinemachineImpulseSource>();
+    }
+
+    protected void Update()
+    {
+        if (target is null)
+            transform.Translate((startPosition - (Vector2)transform.position).normalized * Time.deltaTime);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
