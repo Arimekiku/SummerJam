@@ -37,12 +37,12 @@ public class PlayerRangedWeapon : PlayerWeapon
         UpdateUI();
 
         currentAmmo -= 1;
-        currentAmmoUI[currentAmmo].Deplete();
+        //currentAmmoUI[currentAmmo].Deplete();
         
         poolAmmo.GetFreeElement(out Ammunition ammunition);
         Vector2 directionVector = (targetPointPosition - AttackPointPosition).normalized;
         ammunition.SetDirectionAndStart(directionVector, attackPointTransform.position);
-        AudioHandler.PlaySound(attackSound);
+        //AudioHandler.PlaySound(attackSound);
         StartCoroutine(ReloadTimer());
     }
 
@@ -55,6 +55,7 @@ public class PlayerRangedWeapon : PlayerWeapon
             ammunition.SetDamage(damage);
 
         Equip(holder);
+        holder.EquipWeapon(this);
     }
 
     public override void ThrowWeapon(Vector2 targetPointPosition)

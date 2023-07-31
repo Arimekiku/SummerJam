@@ -52,7 +52,7 @@ public class Pool<T> where T : PoolableObject
 
     public void GetFreeElement(out T freeObjectInPool)
     {
-        freeObjectInPool = poolList.First(o => !o.gameObject.activeSelf);
+        freeObjectInPool = poolList.FirstOrDefault(o => !o.gameObject.activeSelf);
 
         if (freeObjectInPool)
         {

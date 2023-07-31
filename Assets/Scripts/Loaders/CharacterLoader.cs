@@ -1,7 +1,10 @@
+using Cinemachine;
 using UnityEngine;
 
 public class CharacterLoader : MonoBehaviour
 {
+    [SerializeField] private CinemachineVirtualCamera defaultCamera;
+    
     private Player playerPrefab;
     
     public Player InitializePlayer()
@@ -10,6 +13,8 @@ public class CharacterLoader : MonoBehaviour
 
         Player instantiatedPlayer = Instantiate(playerPrefab, transform);
         instantiatedPlayer.Activate();
+
+        defaultCamera.Follow = instantiatedPlayer.transform;
 
         return instantiatedPlayer;
     }

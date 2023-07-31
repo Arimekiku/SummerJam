@@ -45,10 +45,8 @@ public abstract class PlayerWeapon : ItemBehaviour
 
     protected void Equip(Player holder)
     {
-        PlayerWeapon weaponToSpawn = Instantiate(this, transform.position, Quaternion.identity);
-
-        weaponToSpawn.transform.SetParent(holder.RangedContainer, false);
-        weaponToSpawn.transform.SetLocalPositionAndRotation(Vector2.zero, Quaternion.identity);
+        transform.SetParent(holder.RangedContainer, false);
+        transform.SetLocalPositionAndRotation(Vector2.zero, Quaternion.identity);
     }
     
     public void Drop(Vector2 playerPosition)

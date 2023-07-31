@@ -26,7 +26,7 @@ public class Player : Character
     public Transform RangedContainer => rangedWeaponContainer;
 
     private PlayerMeleeWeapon currentMeleeWeapon;
-    private PlayerRangedWeapon currentPlayerRangedWeapon;
+    private PlayerRangedWeapon currentRangedWeapon;
 
     private readonly Dictionary<Type, int> ammoStack = new Dictionary<Type, int>();
     private CinemachineImpulseSource shake;
@@ -64,36 +64,34 @@ public class Player : Character
                 currentMeleeWeapon.Attack(CursorPosition);
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
-            if (currentPlayerRangedWeapon)
-                currentPlayerRangedWeapon.Attack(CursorPosition);
+            if (currentRangedWeapon)
+                currentRangedWeapon.Attack(CursorPosition);
 
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            if (currentPlayerRangedWeapon)
+            if (currentRangedWeapon)
             {
-                if (currentPlayerRangedWeapon is not Bow)
+                if (currentRangedWeapon is not Bow)
                 {
-                    currentPlayerRangedWeapon.ThrowWeapon(CursorPosition);
+                    currentRangedWeapon.ThrowWeapon(CursorPosition);
                     uiHandler.ClearWeapon();
-                    currentPlayerRangedWeapon = null;
+                    currentRangedWeapon = null;
                 }
             }
 
             if (currentMeleeWeapon)
             {
                 currentMeleeWeapon.ThrowWeapon(CursorPosition);
-                currentPlayerRangedWeapon = null;
+                currentRangedWeapon = null;
             }
         }
         
         if (Input.GetKeyDown(KeyCode.E))
-        {
             Interact();
-        }
 
         if (Input.GetKeyDown(KeyCode.R))
-            if(currentPlayerRangedWeapon)
-                Reload(currentPlayerRangedWeapon);
+            if(currentRangedWeapon)
+                Reload(currentRangedWeapon);
     }
 
     private void FixedUpdate()
@@ -207,6 +205,14 @@ public class Player : Character
             interactable.Interact();
             return;
         }
+    }
+
+    public void EquipWeapon(PlayerRangedWeapon weaponToEquip)
+    {
+        if (currentRangedWeapon)
+            currentRangedWeapon.Drop(transform.position);
+
+        currentRangedWeapon = weaponToEquip;
     }
 
     public override void TakeDamage(int damage, Vector2 damageDirection)
